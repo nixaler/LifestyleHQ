@@ -17,7 +17,8 @@
   --purple:#7B2FBE;--green:#028A48;--yellow:#c8a800;
   --blue:#0060A9;--red:#c43030;--orange:#D35B2C;--accent:#4a9eff;
 }
-html{background:#f5f5f7}body{background:#f5f5f7;font-family:'JetBrains Mono','Courier New',monospace;color:#111111;min-height:100vh}
+html{background:#f5f5f7}
+body{background:#f5f5f7;font-family:'JetBrains Mono','Courier New',monospace;color:#111111;min-height:100vh}
 #app{display:flex;flex-direction:column;min-height:100vh;max-width:480px;margin:0 auto;background:#f5f5f7}
 .stripe{height:4px;display:flex;flex-shrink:0}
 .hdr{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:#ffffff}
@@ -27,10 +28,10 @@ html{background:#f5f5f7}body{background:#f5f5f7;font-family:'JetBrains Mono','Co
 .hdr-score-lbl{font-size:7px;color:var(--txt3);letter-spacing:1px}
 #content{flex:1;padding:14px 16px;overflow-y:auto;padding-bottom:calc(72px + env(safe-area-inset-bottom,16px));background:#f5f5f7}
 .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#ffffff;border-top:1px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom,8px);z-index:100}
-.nav-btn{flex:1;padding:9px 4px 7px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border-top:2px solid transparent;background:transparent;border-left:none;border-right:none;border-bottom:none;color:var(--txt3);font-family:inherit}
+.nav-btn{flex:1;padding:8px 2px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border-top:2px solid transparent;background:transparent;border-left:none;border-right:none;border-bottom:none;color:var(--txt3);font-family:inherit}
 .nav-btn.active{border-top-color:var(--accent);color:var(--accent)}
-.nav-icon{font-size:17px}
-.nav-lbl{font-size:7.5px;letter-spacing:1px;font-weight:400}
+.nav-icon{font-size:15px}
+.nav-lbl{font-size:6.5px;letter-spacing:.5px;font-weight:400}
 .nav-btn.active .nav-lbl{font-weight:700}
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px}
 .slbl{font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700;display:block}
@@ -44,10 +45,10 @@ select.inp option{background:#fff;color:#111}
 textarea.inp{resize:none;line-height:1.7}
 input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:4px;background:rgba(0,0,0,.1);outline:none;display:block;margin:4px 0}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;cursor:pointer}
-.chk-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer}
-.chk-box{width:20px;height:20px;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:1.5px solid rgba(0,0,0,.15);color:transparent}
+.chk-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.chk-box{width:20px;height:20px;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:1.5px solid rgba(0,0,0,.15);color:transparent;cursor:pointer}
 .chk-box.done{background:var(--green);border-color:var(--green);color:#000}
-.chk-lbl{font-size:12px;flex:1}
+.chk-lbl{font-size:12px;flex:1;cursor:pointer}
 .chk-lbl.done{color:var(--txt3);text-decoration:line-through}
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
@@ -55,6 +56,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .exp-hdr{display:flex;align-items:center;justify-content:space-between;cursor:pointer}
 .tx-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
 .row-gap{margin-bottom:8px}
+.del-btn{background:none;border:none;color:var(--red);font-size:18px;cursor:pointer;padding:0 4px;line-height:1;font-family:inherit;flex-shrink:0}
+.edit-lnk{font-size:9px;color:var(--accent);cursor:pointer;letter-spacing:1px;font-weight:700;text-decoration:underline;background:none;border:none;font-family:inherit}
+.add-row{padding:8px 0;text-align:center;color:var(--txt3);font-size:10px;cursor:pointer;letter-spacing:1px;border-top:1px solid var(--border)}
 </style>
 </head>
 <body>
@@ -74,17 +78,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
   <div class="nav" id="nav"></div>
 </div>
 <script>
-// ─── Data ──────────────────────────────────────────────────────────────────
+// ─── Defaults ──────────────────────────────────────────────────────────────
 const STRIPES=['#0060A9','#D02B27','#028A48','#FFC72C','#D35B2C','#BF0000','#009CDE','#00B140','#919D9D'];
-const HABITS=[
-  {id:'wake', name:'Wake by 8AM',         icon:'⏰',key:true},
-  {id:'journ',name:'Journal daily',        icon:'📝',key:true},
-  {id:'water',name:'Drink enough water',   icon:'💧',key:true},
-  {id:'biz',  name:'Work on the business', icon:'🎮',key:true},
-  {id:'mad',  name:'Check in w/ Madison',  icon:'👧',key:true},
-  {id:'read', name:'Read daily',           icon:'📖',key:false},
-  {id:'med',  name:'Meditate / breathe',   icon:'🧘',key:false},
-  {id:'fit',  name:'Exercise',             icon:'💪',key:false},
+const DEF_HABITS=[
+  {id:'wake', name:'Wake by 8AM',        icon:'⏰',key:true},
+  {id:'journ',name:'Journal daily',       icon:'📝',key:true},
+  {id:'water',name:'Drink enough water',  icon:'💧',key:true},
+  {id:'biz',  name:'Work on the business',icon:'🎮',key:true},
+  {id:'mad',  name:'Check in w/ Madison', icon:'👧',key:true},
+  {id:'read', name:'Read daily',          icon:'📖',key:false},
+  {id:'med',  name:'Meditate / breathe',  icon:'🧘',key:false},
+  {id:'fit',  name:'Exercise',            icon:'💪',key:false},
 ];
 const MENTAL=['Anxiety','Focus','Stress','Motivation','Confidence','Clarity','Gratitude','Energy'];
 const MCOL={Anxiety:'#c43030',Focus:'#4a9eff',Stress:'#D35B2C',Motivation:'#028A48',Confidence:'#c8a800',Clarity:'#7B2FBE',Gratitude:'#ff69b4',Energy:'#00cc88'};
@@ -175,10 +179,16 @@ let F={
   sleep:'',water:0,mealinput:'',meals:[],pain:0,showpain:false,
   incamt:'',incsrc:'DoorDash',expamt:'',expcat:'Food',expnote:'',
   opensp:null,openpr:null,openev:null,
+  journalDate:'',
+  showAddHabit:false,newHabName:'',newHabIcon:'📌',newHabKey:false,
+  showAddSponsor:false,newSpName:'',newSpType:'Bar / Restaurant',
+  showAddPress:false,newPrName:'',newPrContact:'',
+  showAddEvent:false,newEvTitle:'',newEvType:'health',newEvDate:'',
+  showAddMil:false,newMilText:'',newMilVal:'',
 };
 
 function load(){
-  try{const d=localStorage.getItem('taehq2');if(d)S=JSON.parse(d);}catch(e){}
+  try{const d=localStorage.getItem('taehq2');if(d)S=JSON.parse(d);}catch(ex){}
   if(!S.ci)S.ci={};
   if(!S.moodlog)S.moodlog=[];
   if(!S.hlog)S.hlog={};
@@ -191,20 +201,30 @@ function load(){
   if(!S.press)S.press=JSON.parse(JSON.stringify(DEF_PRESS));
   if(!S.mil)S.mil=JSON.parse(JSON.stringify(DEF_MIL));
   if(!S.events)S.events=JSON.parse(JSON.stringify(DEF_EVENTS));
+  if(!S.habits)S.habits=JSON.parse(JSON.stringify(DEF_HABITS));
+  // give old moodlog entries an id
+  S.moodlog=S.moodlog.map(m=>m.id?m:{...m,id:Date.now()+Math.random()});
+  // restore today's body state
+  const tl=S.hlog[tod()]||{};
+  F.water=tl.water||0;
+  F.sleep=tl.sleep!=null?String(tl.sleep):'';
+  F.meals=[];
+  F.journalDate=tod();
 }
-function save(){try{localStorage.setItem('taehq2',JSON.stringify(S));}catch(e){}}
+function persist(){try{localStorage.setItem('taehq2',JSON.stringify(S));}catch(ex){}}
 
 // ─── Helpers ───────────────────────────────────────────────────────────────
 const tod=()=>new Date().toISOString().slice(0,10);
 const f$=n=>n>=1000?'$'+(n/1000).toFixed(1)+'k':'$'+Math.round(n);
 const ci=()=>S.ci[tod()]||{};
 const hl=()=>S.hablog[tod()]||{};
-const keys=()=>HABITS.filter(h=>h.key);
+const habits=()=>S.habits||[];
+const keys=()=>habits().filter(h=>h.key);
 const monthInc=()=>S.inclog.filter(r=>r.date&&r.date.slice(0,7)===tod().slice(0,7)).reduce((s,r)=>s+parseFloat(r.amount||0),0);
 function score(){
   const c=ci(),h=hl(),k=keys();
   const hd=k.filter(x=>h[x.id]).length;
-  return Math.round(Math.min(100,(c.md?20:0)+(c.jd?15:0)+(hd/k.length*35)+(c.ed?20:0)+(c.win?10:0)));
+  return Math.round(Math.min(100,(c.md?20:0)+(c.jd?15:0)+(hd/Math.max(1,k.length)*35)+(c.ed?20:0)+(c.win?10:0)));
 }
 function streak(id){
   let s=0;const d=new Date();
@@ -216,27 +236,28 @@ function streak(id){
   return s;
 }
 function dOpps(){
-  const n=new Date().getDate();
-  const out=[];
+  const n=new Date().getDate();const out=[];
   for(let i=0;i<5;i++)out.push(OPPS[(n*3+i)%OPPS.length]);
   return out;
 }
 function e(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''}
 function pct(v,mx){return Math.min(100,mx>0?(v/mx)*100:0).toFixed(0)}
+function fmtDate(d){
+  if(!d)return'';
+  try{return new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});}
+  catch(ex){return d;}
+}
 
 // ─── Render ────────────────────────────────────────────────────────────────
 function render(){
-  const c=document.getElementById('content');
-  if(!c)return;
-  const fns={today:rToday,mind:rMind,body:rBody,money:rMoney,build:rBuild};
+  const c=document.getElementById('content');if(!c)return;
+  const fns={today:rToday,mind:rMind,body:rBody,money:rMoney,build:rBuild,journal:rJournal};
   c.innerHTML=(fns[tab]||rToday)();
-  // header
   const sc=score();
   const sel=document.getElementById('score-el');
   if(sel){sel.textContent=sc;sel.style.color=sc>=80?'var(--green)':sc>=50?'var(--yellow)':'var(--red)';}
   const de=document.getElementById('hdr-date');
   if(de)de.textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'}).toUpperCase();
-  // nav
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
 }
 
@@ -245,10 +266,12 @@ function rToday(){
   const c=ci(),h=hl(),k=keys(),sc=score();
   const scol=sc>=80?'var(--green)':sc>=50?'var(--yellow)':'var(--red)';
   const prompt=PROMPTS[new Date().getDate()%PROMPTS.length];
-  const chips=[['☀️ Morning',c.md],['📝 Journal',c.jd],['🔥 Habits',k.filter(x=>h[x.id]).length===k.length&&k.length>0],['🌙 Evening',c.ed],['🏆 Win',!!c.win]];
+  const chips=[['☀️ Morning',c.md],['📝 Journal',c.jd],['🔥 Habits',k.length>0&&k.filter(x=>h[x.id]).length===k.length],['🌙 Evening',c.ed],['🏆 Win',!!c.win]];
 
   const morn=c.md
-    ?`<div style="color:var(--green);font-size:11px;margin-bottom:6px">✓ Done · Mood ${c.mood}/10</div>${(c.ints||[]).filter(Boolean).map(i=>`<div style="font-size:11px;color:var(--txt2);line-height:1.8">→ ${e(i)}</div>`).join('')}`
+    ?`<div style="color:var(--green);font-size:11px;margin-bottom:6px">✓ Mood ${c.mood}/10</div>
+${(c.ints||[]).filter(Boolean).map(i=>`<div style="font-size:11px;color:var(--txt2);line-height:1.8">→ ${e(i)}</div>`).join('')}
+<div style="margin-top:10px"><button class="edit-lnk" onclick="editMorn()">EDIT</button></div>`
     :`<div style="font-size:10px;color:var(--txt3);margin-bottom:5px">Mood right now · <span id="mv" style="color:var(--accent);font-weight:700">${F.mood}/10</span></div>
 <input type="range" min="1" max="10" value="${F.mood}" style="accent-color:var(--accent);margin-bottom:12px" oninput="F.mood=+this.value;document.getElementById('mv').textContent=this.value+'/10'">
 <div style="font-size:10px;color:var(--txt3);margin-bottom:6px">Top 3 intentions for today</div>
@@ -258,7 +281,8 @@ function rToday(){
 <button class="btn btn-full" style="background:var(--accent);color:#fff" onclick="saveMorn()">SAVE MORNING →</button>`;
 
   const journ=c.jd
-    ?`<div style="font-size:11px;color:var(--txt2);line-height:1.7;font-style:italic">"${e(c.jans)}"</div>`
+    ?`<div style="font-size:11px;color:var(--txt2);line-height:1.7;font-style:italic">"${e(c.jans)}"</div>
+<div style="margin-top:10px"><button class="edit-lnk" onclick="editJourn()">EDIT</button></div>`
     :`<textarea class="inp" rows="3" placeholder="Your answer..." oninput="F.jans=this.value" style="margin-bottom:8px">${e(F.jans)}</textarea>
 <button class="btn btn-full" style="background:var(--purple);color:#fff" onclick="saveJourn()">SAVE JOURNAL</button>`;
 
@@ -280,7 +304,10 @@ function rToday(){
   }).join('');
 
   const eve=c.ed
-    ?`<div style="color:var(--green);font-size:11px;margin-bottom:4px">✓ Done · Mood ${c.emood}/10</div>${c.win?`<div style="font-size:11px;color:var(--yellow);font-weight:700">🏆 ${e(c.win)}</div>`:''}`
+    ?`<div style="color:var(--green);font-size:11px;margin-bottom:4px">✓ Mood ${c.emood}/10</div>
+${c.win?`<div style="font-size:11px;color:var(--yellow);font-weight:700;margin-bottom:4px">🏆 ${e(c.win)}</div>`:''}
+${c.refl?`<div style="font-size:11px;color:var(--txt2);font-style:italic">"${e(c.refl)}"</div>`:''}
+<div style="margin-top:10px"><button class="edit-lnk" onclick="editEve()">EDIT</button></div>`
     :`<div style="font-size:10px;color:var(--txt3);margin-bottom:5px">End of day mood · <span id="ev" style="color:var(--purple);font-weight:700">${F.emood}/10</span></div>
 <input type="range" min="1" max="10" value="${F.emood}" style="accent-color:var(--purple);margin-bottom:10px" oninput="F.emood=+this.value;document.getElementById('ev').textContent=this.value+'/10'">
 <input class="inp" placeholder="Today's win — even a small one..." value="${e(F.win)}" oninput="F.win=this.value" style="margin-bottom:8px">
@@ -301,7 +328,7 @@ ${chips.map(([l,d])=>`<div style="background:${d?'rgba(2,138,72,.2)':'rgba(0,0,0
 <div style="font-size:13px;font-weight:700;line-height:1.5;margin-bottom:12px">"${prompt}"</div>
 ${journ}
 </div>
-<div class="card"><span class="slbl" style="color:var(--green)">🔥 HABITS TODAY</span>${habRows}</div>
+<div class="card"><span class="slbl" style="color:var(--green)">🔥 HABITS TODAY</span>${habRows||'<div style="font-size:11px;color:var(--txt3)">No key habits set. Add them in Body tab.</div>'}</div>
 <div class="card">
 <span class="slbl" style="color:var(--yellow)">⚡ TODAY'S OPPORTUNITIES</span>
 <div style="font-size:9px;color:var(--txt3);margin-bottom:10px">Refreshes daily · Built for your situation</div>
@@ -320,11 +347,18 @@ function rMind(){
 </div>`;
   }).join('');
 
-  const hist=[...S.moodlog].reverse().slice(0,7).map(m=>{
+  const hist=[...S.moodlog].reverse().map((m,ri)=>{
+    const realIdx=S.moodlog.length-1-ri;
     const col=m.mood>=7?'var(--green)':m.mood>=5?'var(--yellow)':'var(--red)';
     const tags=Object.entries(m.ms||{}).filter(([,v])=>v>=7).map(([k,v])=>`<span class="pill" style="background:${MCOL[k]}22;color:${MCOL[k]};border:1px solid ${MCOL[k]}44;margin:2px">${k} ${v}</span>`).join('');
     return`<div style="padding:8px 0;border-bottom:1px solid var(--border)">
-<div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:10px;color:var(--txt3)">${m.date}</span><span style="font-size:12px;font-weight:700;color:${col}">${m.mood}/10</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+<span style="font-size:10px;color:var(--txt3)">${m.date}</span>
+<div style="display:flex;align-items:center;gap:8px">
+<span style="font-size:12px;font-weight:700;color:${col}">${m.mood}/10</span>
+<button class="del-btn" onclick="delMood(${realIdx})">×</button>
+</div>
+</div>
 ${m.trigger?`<div style="font-size:10px;color:var(--txt2);font-style:italic;margin-bottom:3px">${e(m.trigger)}</div>`:''}
 <div>${tags}</div>
 </div>`;
@@ -342,41 +376,75 @@ ${sliders}
 </div>
 <div class="card">
 <span class="slbl">MOOD HISTORY</span>
-${S.moodlog.length===0?'<div style="font-size:11px;color:var(--txt3);text-align:center;padding:12px 0">No mood logs yet. Start above.</div>':hist}
+${S.moodlog.length===0?'<div style="font-size:11px;color:var(--txt3);text-align:center;padding:12px 0">No mood logs yet.</div>':hist}
 </div>`;
 }
 
 // ─── BODY ──────────────────────────────────────────────────────────────────
 function rBody(){
   const tl=S.hlog[tod()]||{};
-  const allHabs=HABITS.map(hb=>{
+
+  const habRows=habits().map(hb=>{
     const d=!!hl()[hb.id];const s=streak(hb.id);
-    return`<div class="chk-row" onclick="togHab('${hb.id}')">
-<div class="chk-box${d?' done':''}">✓</div>
-<span class="chk-lbl${d?' done':''}">${hb.icon} ${hb.name}</span>
-${hb.key?`<span style="font-size:7px;color:var(--yellow);letter-spacing:1px;font-weight:700;margin-right:4px">KEY</span>`:''}
-${s>0?`<span style="font-size:9px;color:var(--yellow);font-weight:700">${s}🔥</span>`:''}
+    return`<div class="chk-row">
+<div class="chk-box${d?' done':''}" onclick="togHab('${hb.id}')">✓</div>
+<span class="chk-lbl${d?' done':''}" onclick="togHab('${hb.id}')">${hb.icon} ${hb.name}</span>
+${hb.key?`<span style="font-size:7px;color:var(--yellow);letter-spacing:1px;font-weight:700;margin-right:2px">KEY</span>`:''}
+${s>0?`<span style="font-size:9px;color:var(--yellow);font-weight:700;margin-right:4px">${s}🔥</span>`:''}
+<button class="del-btn" onclick="removeHabit('${hb.id}')">×</button>
 </div>`;
   }).join('');
 
-  const mls=(F.meals||[]).map((m,i)=>`<div style="font-size:11px;color:var(--txt2);padding:5px 0;border-bottom:1px solid var(--border)">${e(m)} <span onclick="F.meals.splice(${i},1);render()" style="color:var(--red);cursor:pointer;float:right;font-size:14px">×</span></div>`).join('');
+  const addHabitForm=F.showAddHabit
+    ?`<div style="padding:12px;background:rgba(0,0,0,.02);border-radius:8px;margin-top:8px">
+<div style="display:flex;gap:6px;margin-bottom:6px">
+<input class="inp" placeholder="Emoji..." value="${e(F.newHabIcon)}" oninput="F.newHabIcon=this.value" style="width:60px">
+<input class="inp" placeholder="Habit name..." value="${e(F.newHabName)}" oninput="F.newHabName=this.value" style="flex:1">
+</div>
+<label style="font-size:10px;color:var(--txt3);display:flex;align-items:center;gap:6px;margin-bottom:8px;cursor:pointer">
+<input type="checkbox" ${F.newHabKey?'checked':''} onchange="F.newHabKey=this.checked"> Mark as KEY habit (counts toward daily score)
+</label>
+<div style="display:flex;gap:6px">
+<button class="btn" style="background:var(--green);color:#fff;flex:1" onclick="addHabit()">ADD HABIT</button>
+<button class="btn" style="background:rgba(0,0,0,.06);color:var(--txt2)" onclick="F.showAddHabit=false;render()">CANCEL</button>
+</div>
+</div>`
+    :`<div class="add-row" onclick="F.showAddHabit=true;render()">+ ADD HABIT</div>`;
+
+  const savedMeals=(tl.meals||[]).map((m,i)=>`<div style="display:flex;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)">
+<span style="font-size:11px;color:var(--txt2);flex:1">${e(m)}</span>
+<button class="del-btn" onclick="removeSavedMeal(${i})">×</button>
+</div>`).join('');
+
+  const pendingMeals=F.meals.map((m,i)=>`<div style="display:flex;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)">
+<span style="font-size:11px;color:var(--orange);flex:1">${e(m)}</span>
+<span style="font-size:8px;color:var(--txt3);margin-right:4px">unsaved</span>
+<button class="del-btn" onclick="F.meals.splice(${i},1);render()">×</button>
+</div>`).join('');
 
   const painSection=F.showpain
     ?`<div style="font-size:10px;color:var(--txt3);margin-bottom:5px">Pain level · <span id="pv" style="color:var(--red);font-weight:700">${F.pain}/10</span></div>
 <input type="range" min="0" max="10" value="${F.pain}" style="accent-color:var(--red);margin-bottom:8px" oninput="F.pain=+this.value;document.getElementById('pv').textContent=this.value+'/10'">
-<button class="btn" style="background:var(--red);color:#fff" onclick="logPain()">LOG PAIN</button>`
-    :(tl.pain!=null?`<div style="font-size:11px;color:var(--red)">Pain today: ${tl.pain}/10</div>`:'<div style="font-size:11px;color:var(--txt3)">No pain logged today.</div>');
+<div style="display:flex;gap:8px">
+<button class="btn" style="background:var(--red);color:#fff;flex:1" onclick="logPain()">SAVE PAIN LOG</button>
+<button class="btn" style="background:rgba(0,0,0,.06);color:var(--txt2)" onclick="F.showpain=false;render()">CANCEL</button>
+</div>`
+    :`<div style="display:flex;justify-content:space-between;align-items:center">
+${tl.pain!=null?`<div style="font-size:11px;color:var(--red)">Pain logged: ${tl.pain}/10</div>`:'<div style="font-size:11px;color:var(--txt3)">No pain logged today.</div>'}
+<button class="edit-lnk" onclick="F.showpain=true;render()">${tl.pain!=null?'UPDATE':'LOG PAIN'}</button>
+</div>`;
 
   return`
 <div class="card">
 <span class="slbl" style="color:var(--green)">💤 SLEEP</span>
 <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
-<input class="inp" type="number" placeholder="Hours..." value="${F.sleep}" oninput="F.sleep=this.value" style="width:90px">
+<input class="inp" type="number" placeholder="Hours..." value="${e(F.sleep)}" oninput="F.sleep=this.value" style="width:90px">
 <span style="font-size:11px;color:var(--txt3);flex:1">/ 6hr goal</span>
-<button class="btn" style="background:var(--green);color:#fff" onclick="logSleep()">LOG</button>
+<button class="btn" style="background:var(--green);color:#fff" onclick="logSleep()">SAVE</button>
 </div>
-${tl.sleep!=null?`<div class="pbar" style="height:6px"><div class="pbar-fill" style="width:${pct(tl.sleep,6)}%;height:100%;background:var(--green)"></div></div><div style="font-size:9px;color:var(--txt3);margin-top:4px">${tl.sleep}h logged</div>`:''}
+${tl.sleep!=null?`<div class="pbar" style="height:6px"><div class="pbar-fill" style="width:${pct(tl.sleep,6)}%;height:100%;background:var(--green)"></div></div><div style="font-size:9px;color:var(--txt3);margin-top:4px">${tl.sleep}h saved</div>`:''}
 </div>
+
 <div class="card">
 <span class="slbl" style="color:var(--accent)">💧 WATER</span>
 <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px">
@@ -388,51 +456,51 @@ ${tl.sleep!=null?`<div class="pbar" style="height:6px"><div class="pbar-fill" st
 <button class="btn" style="background:var(--accent);color:#fff;padding:8px 18px;font-size:20px" onclick="adjWater(1)">+</button>
 </div>
 <div class="pbar" style="height:6px"><div class="pbar-fill" style="width:${pct(F.water,8)}%;height:100%;background:var(--accent)"></div></div>
-<div onclick="logWater()" style="font-size:9px;color:var(--accent);margin-top:8px;cursor:pointer;letter-spacing:1px">SAVE WATER LOG</div>
+<button class="btn btn-full" style="background:var(--accent);color:#fff;margin-top:10px" onclick="logWater()">SAVE WATER LOG</button>
+${tl.water!=null?`<div style="font-size:9px;color:var(--txt3);margin-top:5px;text-align:center">Last saved: ${tl.water} glasses</div>`:''}
 </div>
+
 <div class="card">
 <span class="slbl" style="color:var(--orange)">🍽️ MEALS</span>
 <div style="display:flex;gap:8px;margin-bottom:10px">
 <input class="inp" placeholder="Log a meal..." value="${e(F.mealinput)}" oninput="F.mealinput=this.value" onkeydown="if(event.key==='Enter')addMeal()" style="flex:1">
 <button class="btn" style="background:var(--orange);color:#fff" onclick="addMeal()">+</button>
 </div>
-${mls}
-${F.meals.length>0?`<div onclick="saveMeals()" style="font-size:9px;color:var(--orange);margin-top:8px;cursor:pointer;letter-spacing:1px">SAVE MEALS</div>`:''}
+${savedMeals}
+${pendingMeals}
+${F.meals.length>0?`<button class="btn btn-full" style="background:var(--orange);color:#fff;margin-top:10px" onclick="saveMeals()">SAVE ${F.meals.length} MEAL${F.meals.length>1?'S':''} TO LOG</button>`:''}
+${!tl.meals?.length&&!F.meals.length?`<div style="font-size:11px;color:var(--txt3);text-align:center;padding:8px 0">No meals logged today.</div>`:''}
 </div>
+
 <div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:${F.showpain?10:0}px">
-<span class="slbl" style="color:var(--red);margin-bottom:0">🦶 PAIN TRACKER</span>
-<span onclick="F.showpain=!F.showpain;render()" style="font-size:9px;color:var(--red);cursor:pointer;letter-spacing:1px">${F.showpain?'HIDE':'LOG PAIN'}</span>
-</div>
+<span class="slbl" style="color:var(--red)">🦶 PAIN TRACKER</span>
 ${painSection}
 </div>
+
 <div class="card">
-<span class="slbl">🩺 HEALTH TO-DO</span>
-${[{t:'Foot follow-up appointment',u:'high'},{t:'Glasses replacement',u:'med'},{t:'Tooth — needs to be pulled',u:'med'},{t:'Annual physical / checkup',u:'low'}].map(x=>{
-  const col={high:'var(--red)',med:'var(--yellow)',low:'var(--green)'}[x.u];
-  return`<div style="display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)"><div style="width:8px;height:8px;border-radius:50%;background:${col};flex-shrink:0"></div><span style="font-size:11px;color:var(--txt2);flex:1">${x.t}</span><span style="font-size:8px;color:${col};letter-spacing:1px;font-weight:700">${x.u.toUpperCase()}</span></div>`;
-}).join('')}
-</div>
-<div class="card"><span class="slbl" style="color:var(--green)">🔄 ALL HABITS</span>${allHabs}</div>`;
+<span class="slbl" style="color:var(--green)">🔄 HABITS</span>
+${habRows||'<div style="font-size:11px;color:var(--txt3);padding:8px 0">No habits yet. Add one below.</div>'}
+${addHabitForm}
+</div>`;
 }
 
 // ─── MONEY ─────────────────────────────────────────────────────────────────
 function rMoney(){
   const mi=monthInc();
-  const txs=[...S.inclog.map(r=>({...r,t:'i'})),...S.explog.map(r=>({...r,t:'e'}))].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,15);
+  const txs=[...S.inclog.map(r=>({...r,t:'i'})),...S.explog.map(r=>({...r,t:'e'}))].sort((a,b)=>new Date(b.date)-new Date(a.date));
   return`
 <div class="stat-grid">
 <div class="stat-card"><div style="font-size:24px;font-weight:700;color:var(--green);line-height:1">${f$(mi)}</div><div style="font-size:7px;color:var(--txt3);letter-spacing:2px;margin-top:4px">THIS MONTH</div></div>
 <div class="stat-card"><div style="font-size:24px;font-weight:700;color:var(--yellow);line-height:1">${f$(Math.max(0,1000-mi))}</div><div style="font-size:7px;color:var(--txt3);letter-spacing:2px;margin-top:4px">TO $1K GOAL</div></div>
 </div>
 <div class="card">
-<span class="slbl">$1,000 / MONTH SAVINGS GOAL</span>
+<span class="slbl">$1,000 / MONTH GOAL</span>
 <div class="pbar" style="height:8px"><div class="pbar-fill" style="width:${pct(mi,1000)}%;height:100%;background:var(--green)"></div></div>
 <div style="font-size:9px;color:var(--txt3);margin-top:5px">${((mi/1000)*100).toFixed(1)}% reached</div>
 </div>
 <div class="card">
 <span class="slbl" style="color:var(--green)">💵 LOG INCOME</span>
-<div style="display:flex;gap:8px;margin-bottom:0">
+<div style="display:flex;gap:8px">
 <input class="inp" type="number" placeholder="$" value="${F.incamt}" oninput="F.incamt=this.value" style="width:70px">
 <select class="inp" onchange="F.incsrc=this.value" style="flex:1">
 ${['DoorDash','Skipcart','GoPuff','Courial','GuessgameShop','Sponsorship','Prolific','Freelance','Other'].map(s=>`<option${s===F.incsrc?' selected':''}>${s}</option>`).join('')}
@@ -454,12 +522,20 @@ ${['Food','Gas','Phone','Medical','Transport','Personal','Subscriptions','Other'
 </div>
 </div>
 <div class="card">
-<span class="slbl">RECENT TRANSACTIONS</span>
-${txs.length===0?'<div style="font-size:11px;color:var(--txt3);text-align:center;padding:12px 0">No transactions yet.</div>':txs.map(tx=>`<div class="tx-row"><div><div style="font-size:11px;font-weight:700">${e(tx.source||tx.category)}</div><div style="font-size:9px;color:var(--txt3)">${tx.date}${tx.note?' · '+e(tx.note):''}</div></div><div style="font-size:14px;font-weight:700;color:${tx.t==='i'?'var(--green)':'var(--red)'}">${tx.t==='i'?'+':'-'}$${parseFloat(tx.amount||0).toFixed(0)}</div></div>`).join('')}
+<span class="slbl">ALL TRANSACTIONS</span>
+${txs.length===0?'<div style="font-size:11px;color:var(--txt3);text-align:center;padding:12px 0">No transactions yet.</div>':
+txs.map(tx=>`<div class="tx-row">
+<div style="flex:1">
+<div style="font-size:11px;font-weight:700">${e(tx.source||tx.category)}</div>
+<div style="font-size:9px;color:var(--txt3)">${tx.date}${tx.note?' · '+e(tx.note):''}</div>
+</div>
+<div style="font-size:14px;font-weight:700;color:${tx.t==='i'?'var(--green)':'var(--red)'};">${tx.t==='i'?'+':'-'}$${parseFloat(tx.amount||0).toFixed(0)}</div>
+<button class="del-btn" onclick="${tx.t==='i'?`delInc(${tx.id})`:`delExp(${tx.id})`}">×</button>
+</div>`).join('')}
 </div>`;
 }
 
-// ─── BUILD ──────────────────────────────────────────────────────────────────
+// ─── BUILD ─────────────────────────────────────────────────────────────────
 function rBuild(){
   const tr=S.rev.reduce((s,r)=>s+(r.amount||0),0);
   const dm=S.mil.filter(m=>m.done).length;
@@ -473,11 +549,26 @@ function rBuild(){
 <span class="pill" style="background:${col}22;color:${col};border:1px solid ${col}44;margin-left:6px">${SPLBL[sp.status]||sp.status}</span></div>
 <span style="color:var(--txt3);font-size:10px">${o?'▲':'▼'}</span>
 </div>
-${o?`<div style="margin-top:10px"><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">
+${o?`<div style="margin-top:10px">
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">
 ${Object.entries(SPLBL).map(([k,v])=>`<div onclick="setSpSt(${sp.id},'${k}')" style="background:${sp.status===k?col+'33':'rgba(0,0,0,.03)'};border:1px solid ${sp.status===k?col:'var(--border)'};border-radius:6px;padding:4px 10px;font-size:10px;color:${sp.status===k?col:'var(--txt3)'};cursor:pointer">${v}</div>`).join('')}
-</div><textarea class="inp" rows="2" placeholder="Notes..." oninput="spNote(${sp.id},this.value)">${e(sp.notes)}</textarea></div>`:''}
+</div>
+<textarea class="inp" rows="2" placeholder="Notes..." oninput="spNote(${sp.id},this.value)" style="margin-bottom:8px">${e(sp.notes)}</textarea>
+<button class="btn" style="background:rgba(196,48,48,.1);color:var(--red);border:1px solid rgba(196,48,48,.2);font-size:10px" onclick="delSponsor(${sp.id})">REMOVE</button>
+</div>`:''}
 </div>`;
   }).join('');
+
+  const addSpForm=F.showAddSponsor
+    ?`<div class="card" style="padding:12px;margin-bottom:8px">
+<div style="font-size:10px;font-weight:700;color:var(--green);margin-bottom:8px">NEW SPONSOR</div>
+<input class="inp row-gap" placeholder="Name..." value="${e(F.newSpName)}" oninput="F.newSpName=this.value">
+<input class="inp" placeholder="Type..." value="${e(F.newSpType)}" oninput="F.newSpType=this.value" style="margin-bottom:8px">
+<div style="display:flex;gap:6px">
+<button class="btn" style="background:var(--green);color:#fff;flex:1" onclick="addSponsor()">ADD</button>
+<button class="btn" style="background:rgba(0,0,0,.06);color:var(--txt2)" onclick="F.showAddSponsor=false;render()">CANCEL</button>
+</div></div>`
+    :`<div class="add-row" onclick="F.showAddSponsor=true;render()">+ ADD SPONSOR</div>`;
 
   const prRows=S.press.map(pr=>{
     const col=STCOL[pr.status]||'#555';const o=F.openpr===pr.id;
@@ -488,11 +579,26 @@ ${Object.entries(SPLBL).map(([k,v])=>`<div onclick="setSpSt(${sp.id},'${k}')" st
 <span class="pill" style="background:${col}22;color:${col};border:1px solid ${col}44;margin-left:6px">${PRLBL[pr.status]||pr.status}</span></div>
 <span style="color:var(--txt3);font-size:10px">${o?'▲':'▼'}</span>
 </div>
-${o?`<div style="margin-top:10px"><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">
+${o?`<div style="margin-top:10px">
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">
 ${Object.entries(PRLBL).map(([k,v])=>`<div onclick="setPrSt(${pr.id},'${k}')" style="background:${pr.status===k?col+'33':'rgba(0,0,0,.03)'};border:1px solid ${pr.status===k?col:'var(--border)'};border-radius:6px;padding:4px 10px;font-size:10px;color:${pr.status===k?col:'var(--txt3)'};cursor:pointer">${v}</div>`).join('')}
-</div><textarea class="inp" rows="2" placeholder="Notes..." oninput="prNote(${pr.id},this.value)">${e(pr.notes)}</textarea></div>`:''}
+</div>
+<textarea class="inp" rows="2" placeholder="Notes..." oninput="prNote(${pr.id},this.value)" style="margin-bottom:8px">${e(pr.notes)}</textarea>
+<button class="btn" style="background:rgba(196,48,48,.1);color:var(--red);border:1px solid rgba(196,48,48,.2);font-size:10px" onclick="delPress(${pr.id})">REMOVE</button>
+</div>`:''}
 </div>`;
   }).join('');
+
+  const addPrForm=F.showAddPress
+    ?`<div class="card" style="padding:12px;margin-bottom:8px">
+<div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:8px">NEW PRESS CONTACT</div>
+<input class="inp row-gap" placeholder="Publication..." value="${e(F.newPrName)}" oninput="F.newPrName=this.value">
+<input class="inp" placeholder="Contact / email..." value="${e(F.newPrContact)}" oninput="F.newPrContact=this.value" style="margin-bottom:8px">
+<div style="display:flex;gap:6px">
+<button class="btn" style="background:var(--blue);color:#fff;flex:1" onclick="addPress()">ADD</button>
+<button class="btn" style="background:rgba(0,0,0,.06);color:var(--txt2)" onclick="F.showAddPress=false;render()">CANCEL</button>
+</div></div>`
+    :`<div class="add-row" onclick="F.showAddPress=true;render()">+ ADD PRESS CONTACT</div>`;
 
   const evRows=S.events.map(ev=>{
     const col={housing:'var(--blue)',legal:'var(--red)',health:'var(--green)'}[ev.type]||'var(--accent)';
@@ -505,18 +611,52 @@ ${Object.entries(PRLBL).map(([k,v])=>`<div onclick="setPrSt(${pr.id},'${k}')" st
 </div>
 <span class="pill" style="background:${col}22;color:${col};border:1px solid ${col}44;margin-left:8px">${(ev.type||'').toUpperCase()}</span>
 </div>
-${o?`<div style="margin-top:8px;padding-left:16px">
-${ev.notes?`<div style="font-size:11px;color:var(--txt2);margin-bottom:6px;line-height:1.6">${e(ev.notes)}</div>`:''}
+${o?`<div style="margin-top:8px">
 <input class="inp" type="date" value="${e(ev.date)}" oninput="evDate(${ev.id},this.value)" style="margin-bottom:6px">
-<textarea class="inp" rows="2" placeholder="Add notes..." oninput="evNote(${ev.id},this.value)">${e(ev.notes)}</textarea>
+<textarea class="inp" rows="2" placeholder="Notes..." oninput="evNote(${ev.id},this.value)" style="margin-bottom:8px">${e(ev.notes)}</textarea>
+<button class="btn" style="background:rgba(196,48,48,.1);color:var(--red);border:1px solid rgba(196,48,48,.2);font-size:10px" onclick="delEvent(${ev.id})">REMOVE</button>
 </div>`:''}
 </div>`;
   }).join('');
 
-  const milRows=S.mil.map(m=>`<div onclick="togMil(${m.id})" style="background:${m.done?'rgba(200,168,0,.08)':'var(--card)'};border:1px solid ${m.done?'rgba(200,168,0,.35)':'var(--border)'};border-radius:12px;padding:14px;margin-bottom:8px;cursor:pointer;display:flex;gap:12px;align-items:center;opacity:${m.done?.6:1}">
-<div style="width:22px;height:22px;border-radius:6px;flex-shrink:0;background:${m.done?'var(--yellow)':'transparent'};border:1.5px solid ${m.done?'var(--yellow)':'rgba(0,0,0,.15)'};display:flex;align-items:center;justify-content:center;font-size:12px;color:#000;font-weight:700">${m.done?'✓':''}</div>
-<div style="flex:1;font-size:11px;color:${m.done?'var(--txt3)':'var(--txt2)'};text-decoration:${m.done?'line-through':'none'};line-height:1.5">${e(m.text)}</div>
+  const addEvForm=F.showAddEvent
+    ?`<div class="card" style="padding:12px;margin-bottom:8px">
+<div style="font-size:10px;font-weight:700;color:var(--accent);margin-bottom:8px">NEW EVENT</div>
+<input class="inp row-gap" placeholder="Title..." value="${e(F.newEvTitle)}" oninput="F.newEvTitle=this.value">
+<div style="display:flex;gap:8px;margin-bottom:8px">
+<select class="inp" onchange="F.newEvType=this.value" style="flex:1">
+${['health','housing','legal'].map(t=>`<option${t===F.newEvType?' selected':''}>${t}</option>`).join('')}
+</select>
+<input class="inp" type="date" value="${e(F.newEvDate)}" oninput="F.newEvDate=this.value" style="flex:1">
+</div>
+<div style="display:flex;gap:6px">
+<button class="btn" style="background:var(--accent);color:#fff;flex:1" onclick="addEvent()">ADD</button>
+<button class="btn" style="background:rgba(0,0,0,.06);color:var(--txt2)" onclick="F.showAddEvent=false;render()">CANCEL</button>
+</div></div>`
+    :`<div class="add-row" onclick="F.showAddEvent=true;render()">+ ADD EVENT</div>`;
+
+  const milRows=S.mil.map(m=>`<div style="background:${m.done?'rgba(200,168,0,.08)':'var(--card)'};border:1px solid ${m.done?'rgba(200,168,0,.35)':'var(--border)'};border-radius:12px;padding:14px;margin-bottom:8px;display:flex;gap:12px;align-items:center">
+<div onclick="togMil(${m.id})" style="width:22px;height:22px;border-radius:6px;flex-shrink:0;background:${m.done?'var(--yellow)':'transparent'};border:1.5px solid ${m.done?'var(--yellow)':'rgba(0,0,0,.15)'};display:flex;align-items:center;justify-content:center;font-size:12px;color:#000;font-weight:700;cursor:pointer">${m.done?'✓':''}</div>
+<div onclick="togMil(${m.id})" style="flex:1;font-size:11px;color:${m.done?'var(--txt3)':'var(--txt2)'};text-decoration:${m.done?'line-through':'none'};line-height:1.5;cursor:pointer">${e(m.text)}</div>
 <div style="background:${m.done?'rgba(200,168,0,.2)':'rgba(0,0,0,.03)'};border:1px solid ${m.done?'rgba(200,168,0,.35)':'var(--border)'};border-radius:6px;padding:3px 8px;font-size:9px;color:${m.done?'var(--yellow)':'var(--txt3)'};font-weight:700;white-space:nowrap">${e(m.val)}</div>
+<button class="del-btn" onclick="delMil(${m.id})">×</button>
+</div>`).join('');
+
+  const addMilForm=F.showAddMil
+    ?`<div class="card" style="padding:12px;margin-bottom:8px">
+<div style="font-size:10px;font-weight:700;color:var(--yellow);margin-bottom:8px">NEW MILESTONE</div>
+<input class="inp row-gap" placeholder="Milestone..." value="${e(F.newMilText)}" oninput="F.newMilText=this.value">
+<input class="inp" placeholder="Target / value..." value="${e(F.newMilVal)}" oninput="F.newMilVal=this.value" style="margin-bottom:8px">
+<div style="display:flex;gap:6px">
+<button class="btn" style="background:var(--yellow);color:#000;flex:1" onclick="addMil()">ADD</button>
+<button class="btn" style="background:rgba(0,0,0,.06);color:var(--txt2)" onclick="F.showAddMil=false;render()">CANCEL</button>
+</div></div>`
+    :`<div class="add-row" onclick="F.showAddMil=true;render()">+ ADD MILESTONE</div>`;
+
+  const revRows=[...S.rev].reverse().slice(0,5).map(r=>`<div class="tx-row">
+<div style="flex:1"><div style="font-size:11px;font-weight:700">${e(r.source)}</div><div style="font-size:9px;color:var(--txt3)">${r.date}</div></div>
+<div style="font-size:14px;font-weight:700;color:var(--green)">+$${parseFloat(r.amount).toFixed(0)}</div>
+<button class="del-btn" onclick="delRev(${r.id})">×</button>
 </div>`).join('');
 
   return`
@@ -526,59 +666,281 @@ ${ev.notes?`<div style="font-size:11px;color:var(--txt2);margin-bottom:6px;line-
 </div>
 <div class="card">
 <span class="slbl" style="color:var(--green)">💰 LOG GAME REVENUE</span>
-<div style="display:flex;gap:8px">
+<div style="display:flex;gap:8px;margin-bottom:${revRows?'8px':'0'}">
 <input class="inp" type="number" placeholder="$" id="ra" style="width:70px">
 <input class="inp" placeholder="Source..." id="rs" style="flex:1">
 <button class="btn" style="background:var(--green);color:#fff" onclick="logRev()">LOG</button>
 </div>
+${revRows}
 </div>
 <div style="font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700">🎯 SPONSOR PIPELINE</div>
-${spRows}
+${spRows}${addSpForm}
 <div style="font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700;margin-top:8px">📰 PRESS OUTREACH</div>
-${prRows}
+${prRows}${addPrForm}
 <div style="font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700;margin-top:8px">📅 EVENTS & LEGAL</div>
-${evRows}
+${evRows}${addEvForm}
 <div style="font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700;margin-top:8px">🏆 LIFE MILESTONES</div>
 <div class="card" style="margin-bottom:10px"><div class="pbar" style="height:6px"><div class="pbar-fill" style="width:${pct(dm,S.mil.length)}%;height:100%;background:var(--yellow)"></div></div><div style="font-size:9px;color:var(--txt3);margin-top:4px">${dm}/${S.mil.length} complete</div></div>
-${milRows}`;
+${milRows}${addMilForm}`;
+}
+
+// ─── JOURNAL ───────────────────────────────────────────────────────────────
+function rJournal(){
+  const d=F.journalDate||tod();
+  const c=S.ci[d]||{};
+  const h=S.hablog[d]||{};
+  const tl=S.hlog[d]||{};
+  const moods=S.moodlog.filter(m=>m.date===d);
+  const habs=habits();
+  const habsDone=habs.filter(hb=>h[hb.id]);
+  const habsMissed=habs.filter(hb=>!h[hb.id]);
+
+  // build sorted list of all dates with data
+  const dateset=new Set([
+    tod(),
+    ...Object.keys(S.ci),
+    ...Object.keys(S.hablog),
+    ...Object.keys(S.hlog),
+    ...S.moodlog.map(m=>m.date),
+  ]);
+  const allDates=[...dateset].filter(Boolean).sort().reverse().slice(0,60);
+  const dateOpts=allDates.map(dt=>`<option value="${dt}"${dt===d?' selected':''}>${fmtDate(dt)}</option>`).join('');
+
+  const mornSection=c.md?`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+<div style="font-size:8px;letter-spacing:2px;color:var(--accent);font-weight:700;margin-bottom:6px">☀️ MORNING · MOOD ${c.mood}/10</div>
+${(c.ints||[]).filter(Boolean).map(i=>`<div style="font-size:11px;color:var(--txt2);line-height:1.8">→ ${e(i)}</div>`).join('')}
+</div>`:'';
+
+  const journSection=c.jd?`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+<div style="font-size:8px;letter-spacing:2px;color:var(--purple);font-weight:700;margin-bottom:6px">📝 JOURNAL</div>
+<div style="font-size:11px;color:var(--txt2);line-height:1.7;font-style:italic">"${e(c.jans)}"</div>
+</div>`:'';
+
+  const habSection=`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+<div style="font-size:8px;letter-spacing:2px;color:var(--green);font-weight:700;margin-bottom:6px">🔥 HABITS · ${habsDone.length}/${habs.length} done</div>
+${habsDone.map(hb=>`<div style="font-size:11px;color:var(--green);padding:2px 0">✓ ${hb.icon} ${hb.name}</div>`).join('')}
+${d===tod()&&habsMissed.length?habsMissed.map(hb=>`<div style="font-size:11px;color:var(--txt3);padding:2px 0">○ ${hb.icon} ${hb.name}</div>`).join(''):''}
+${!habsDone.length?'<div style="font-size:11px;color:var(--txt3)">No habits completed</div>':''}
+</div>`;
+
+  const bodyParts=[];
+  if(tl.sleep!=null)bodyParts.push(`💤 <b>${tl.sleep}h</b> sleep`);
+  if(tl.water!=null)bodyParts.push(`💧 <b>${tl.water}</b> glasses water`);
+  if(tl.pain!=null)bodyParts.push(`🦶 Pain <b>${tl.pain}/10</b>`);
+  if(tl.meals&&tl.meals.length)bodyParts.push(`🍽️ ${tl.meals.map(m=>e(m)).join(', ')}`);
+  const bodySection=bodyParts.length?`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+<div style="font-size:8px;letter-spacing:2px;color:var(--orange);font-weight:700;margin-bottom:6px">💪 BODY</div>
+${bodyParts.map(p=>`<div style="font-size:11px;color:var(--txt2);padding:2px 0">${p}</div>`).join('')}
+</div>`:'';
+
+  const moodSection=moods.length?`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+<div style="font-size:8px;letter-spacing:2px;color:var(--purple);font-weight:700;margin-bottom:6px">😊 MOOD</div>
+${moods.map(m=>{const col=m.mood>=7?'var(--green)':m.mood>=5?'var(--yellow)':'var(--red)';
+return`<div style="font-size:12px;font-weight:700;color:${col}">${m.mood}/10${m.trigger?` <span style="font-size:10px;color:var(--txt2);font-weight:400;font-style:italic">— ${e(m.trigger)}</span>`:''}</div>`;}).join('')}
+</div>`:'';
+
+  const eveSection=c.ed?`<div style="padding:10px 0">
+<div style="font-size:8px;letter-spacing:2px;color:var(--purple);font-weight:700;margin-bottom:6px">🌙 EVENING · MOOD ${c.emood}/10</div>
+${c.win?`<div style="font-size:12px;color:var(--yellow);font-weight:700;margin-bottom:4px">🏆 ${e(c.win)}</div>`:''}
+${c.refl?`<div style="font-size:11px;color:var(--txt2);line-height:1.7;font-style:italic">"${e(c.refl)}"</div>`:''}
+</div>`:'';
+
+  const hasData=c.md||c.jd||habsDone.length||bodyParts.length||moods.length||c.ed;
+
+  // income/expense for selected date
+  const dayInc=S.inclog.filter(r=>r.date===d);
+  const dayExp=S.explog.filter(r=>r.date===d);
+  const moneySection=(dayInc.length||dayExp.length)?`<div class="card" style="margin-top:0">
+<span class="slbl" style="color:var(--green)">💰 MONEY · ${fmtDate(d)}</span>
+${dayInc.map(r=>`<div class="tx-row"><div style="flex:1"><div style="font-size:11px;font-weight:700">${e(r.source)}</div></div><div style="font-size:13px;font-weight:700;color:var(--green)">+$${parseFloat(r.amount).toFixed(0)}</div></div>`).join('')}
+${dayExp.map(r=>`<div class="tx-row"><div style="flex:1"><div style="font-size:11px;font-weight:700">${e(r.category)}</div>${r.note?`<div style="font-size:9px;color:var(--txt3)">${e(r.note)}</div>`:''}</div><div style="font-size:13px;font-weight:700;color:var(--red)">-$${parseFloat(r.amount).toFixed(0)}</div></div>`).join('')}
+</div>`:'' ;
+
+  const winsSection=(S.wins||[]).length?`<div class="card">
+<span class="slbl" style="color:var(--yellow)">🏆 WINS LOG</span>
+${(S.wins||[]).slice(0,15).map((w,i)=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start">
+<div><div style="font-size:11px;color:var(--yellow);font-weight:700">${e(w.text)}</div><div style="font-size:9px;color:var(--txt3)">${w.date}</div></div>
+<button class="del-btn" onclick="delWin(${i})">×</button>
+</div>`).join('')}
+</div>`:'';
+
+  return`
+<div class="card">
+<span class="slbl">📓 DAILY JOURNAL</span>
+<select class="inp" onchange="F.journalDate=this.value;render()" style="margin-bottom:6px">${dateOpts}</select>
+<div style="font-size:9px;color:var(--txt3)">${fmtDate(d)}</div>
+</div>
+${hasData?`<div class="card">${mornSection}${journSection}${habSection}${bodySection}${moodSection}${eveSection}</div>`
+:`<div class="card"><div style="font-size:11px;color:var(--txt3);text-align:center;padding:20px 0">No data logged for this day.</div></div>`}
+${moneySection}
+${winsSection}`;
 }
 
 // ─── Handlers ─────────────────────────────────────────────────────────────
-function saveMorn(){if(!S.ci[tod()])S.ci[tod()]={};Object.assign(S.ci[tod()],{md:true,mood:F.mood,ints:[...F.ints]});save();render();}
-function saveJourn(){if(!S.ci[tod()])S.ci[tod()]={};Object.assign(S.ci[tod()],{jd:!!F.jans.trim(),jans:F.jans});save();render();}
+function saveMorn(){
+  if(!S.ci[tod()])S.ci[tod()]={};
+  Object.assign(S.ci[tod()],{md:true,mood:F.mood,ints:[...F.ints]});
+  persist();render();
+}
+function editMorn(){
+  const c=S.ci[tod()]||{};
+  F.mood=c.mood||5;F.ints=[...(c.ints||['','',''])];
+  if(S.ci[tod()])S.ci[tod()].md=false;
+  persist();render();
+}
+function saveJourn(){
+  if(!S.ci[tod()])S.ci[tod()]={};
+  Object.assign(S.ci[tod()],{jd:!!F.jans.trim(),jans:F.jans});
+  persist();render();
+}
+function editJourn(){
+  const c=S.ci[tod()]||{};
+  F.jans=c.jans||'';
+  if(S.ci[tod()])S.ci[tod()].jd=false;
+  persist();render();
+}
 function saveEve(){
   if(!S.ci[tod()])S.ci[tod()]={};
   Object.assign(S.ci[tod()],{ed:true,emood:F.emood,refl:F.refl,win:F.win});
   if(F.win.trim())S.wins=[{text:F.win,date:tod(),id:Date.now()},...(S.wins||[])];
-  save();render();
+  persist();render();
 }
-function togHab(id){if(!S.hablog[tod()])S.hablog[tod()]={};S.hablog[tod()][id]=!S.hablog[tod()][id];save();render();}
-function logMood(){S.moodlog.push({date:tod(),mood:F.mood,ms:{...F.ms},trigger:F.trigger});F.trigger='';save();render();}
-function logSleep(){if(!S.hlog[tod()])S.hlog[tod()]={};S.hlog[tod()].sleep=parseFloat(F.sleep)||0;save();render();}
+function editEve(){
+  const c=S.ci[tod()]||{};
+  F.win=c.win||'';F.refl=c.refl||'';F.emood=c.emood||5;
+  if(S.ci[tod()])S.ci[tod()].ed=false;
+  persist();render();
+}
+function togHab(id){
+  if(!S.hablog[tod()])S.hablog[tod()]={};
+  S.hablog[tod()][id]=!S.hablog[tod()][id];
+  persist();render();
+}
+function addHabit(){
+  if(!F.newHabName.trim())return;
+  S.habits.push({id:'h'+Date.now(),name:F.newHabName.trim(),icon:F.newHabIcon||'📌',key:F.newHabKey});
+  F.newHabName='';F.newHabIcon='📌';F.newHabKey=false;F.showAddHabit=false;
+  persist();render();
+}
+function removeHabit(id){
+  if(!confirm('Remove this habit?'))return;
+  S.habits=S.habits.filter(h=>h.id!==id);
+  persist();render();
+}
+function logMood(){
+  S.moodlog.push({id:Date.now(),date:tod(),mood:F.mood,ms:{...F.ms},trigger:F.trigger});
+  F.trigger='';persist();render();
+}
+function delMood(idx){S.moodlog.splice(idx,1);persist();render();}
+function logSleep(){
+  if(!S.hlog[tod()])S.hlog[tod()]={};
+  S.hlog[tod()].sleep=parseFloat(F.sleep)||0;
+  persist();render();
+}
 function adjWater(d){F.water=Math.max(0,F.water+d);render();}
-function logWater(){if(!S.hlog[tod()])S.hlog[tod()]={};S.hlog[tod()].water=F.water;save();render();}
-function addMeal(){if(!F.mealinput.trim())return;if(!F.meals)F.meals=[];F.meals.push(F.mealinput);F.mealinput='';render();}
-function saveMeals(){if(!S.hlog[tod()])S.hlog[tod()]={};S.hlog[tod()].meals=[...F.meals];save();render();}
-function logPain(){if(!S.hlog[tod()])S.hlog[tod()]={};S.hlog[tod()].pain=F.pain;F.showpain=false;save();render();}
-function logInc(){if(!F.incamt)return;S.inclog.push({id:Date.now(),amount:parseFloat(F.incamt),source:F.incsrc,date:tod()});F.incamt='';save();render();}
-function logExp(){if(!F.expamt)return;S.explog.push({id:Date.now(),amount:parseFloat(F.expamt),category:F.expcat,note:F.expnote,date:tod()});F.expamt='';F.expnote='';save();render();}
-function logRev(){const a=parseFloat(document.getElementById('ra')?.value);const s=document.getElementById('rs')?.value;if(!a||!s)return;S.rev.push({id:Date.now(),amount:a,source:s,date:tod()});save();render();}
-function setSpSt(id,st){S.sponsors=S.sponsors.map(s=>s.id===id?{...s,status:st}:s);save();render();}
-function spNote(id,v){S.sponsors=S.sponsors.map(s=>s.id===id?{...s,notes:v}:s);save();}
-function setPrSt(id,st){S.press=S.press.map(p=>p.id===id?{...p,status:st}:p);save();render();}
-function prNote(id,v){S.press=S.press.map(p=>p.id===id?{...p,notes:v}:p);save();}
-function togMil(id){S.mil=S.mil.map(m=>m.id===id?{...m,done:!m.done}:m);save();render();}
-function evDate(id,v){S.events=S.events.map(ev=>ev.id===id?{...ev,date:v}:ev);save();}
-function evNote(id,v){S.events=S.events.map(ev=>ev.id===id?{...ev,notes:v}:ev);save();}
+function logWater(){
+  if(!S.hlog[tod()])S.hlog[tod()]={};
+  S.hlog[tod()].water=F.water;
+  persist();render();
+}
+function addMeal(){
+  if(!F.mealinput.trim())return;
+  F.meals.push(F.mealinput.trim());F.mealinput='';render();
+}
+function saveMeals(){
+  if(!F.meals.length)return;
+  if(!S.hlog[tod()])S.hlog[tod()]={};
+  if(!S.hlog[tod()].meals)S.hlog[tod()].meals=[];
+  S.hlog[tod()].meals.push(...F.meals);
+  F.meals=[];persist();render();
+}
+function removeSavedMeal(i){
+  if(!S.hlog[tod()]||!S.hlog[tod()].meals)return;
+  S.hlog[tod()].meals.splice(i,1);
+  persist();render();
+}
+function logPain(){
+  if(!S.hlog[tod()])S.hlog[tod()]={};
+  S.hlog[tod()].pain=F.pain;F.showpain=false;persist();render();
+}
+function logInc(){
+  if(!F.incamt)return;
+  S.inclog.push({id:Date.now(),amount:parseFloat(F.incamt),source:F.incsrc,date:tod()});
+  F.incamt='';persist();render();
+}
+function logExp(){
+  if(!F.expamt)return;
+  S.explog.push({id:Date.now(),amount:parseFloat(F.expamt),category:F.expcat,note:F.expnote,date:tod()});
+  F.expamt='';F.expnote='';persist();render();
+}
+function delInc(id){S.inclog=S.inclog.filter(r=>r.id!==id);persist();render();}
+function delExp(id){S.explog=S.explog.filter(r=>r.id!==id);persist();render();}
+function logRev(){
+  const a=parseFloat(document.getElementById('ra')?.value);
+  const s=document.getElementById('rs')?.value;
+  if(!a||!s)return;
+  S.rev.push({id:Date.now(),amount:a,source:s,date:tod()});
+  persist();render();
+}
+function delRev(id){S.rev=S.rev.filter(r=>r.id!==id);persist();render();}
+function setSpSt(id,st){S.sponsors=S.sponsors.map(s=>s.id===id?{...s,status:st}:s);persist();render();}
+function spNote(id,v){S.sponsors=S.sponsors.map(s=>s.id===id?{...s,notes:v}:s);persist();}
+function addSponsor(){
+  if(!F.newSpName.trim())return;
+  S.sponsors.push({id:Date.now(),name:F.newSpName.trim(),type:F.newSpType,status:'lead',notes:''});
+  F.newSpName='';F.showAddSponsor=false;persist();render();
+}
+function delSponsor(id){
+  if(!confirm('Remove this sponsor?'))return;
+  S.sponsors=S.sponsors.filter(s=>s.id!==id);persist();render();
+}
+function setPrSt(id,st){S.press=S.press.map(p=>p.id===id?{...p,status:st}:p);persist();render();}
+function prNote(id,v){S.press=S.press.map(p=>p.id===id?{...p,notes:v}:p);persist();}
+function addPress(){
+  if(!F.newPrName.trim())return;
+  S.press.push({id:Date.now(),name:F.newPrName.trim(),contact:F.newPrContact,status:'unsent',notes:''});
+  F.newPrName='';F.newPrContact='';F.showAddPress=false;persist();render();
+}
+function delPress(id){
+  if(!confirm('Remove this press contact?'))return;
+  S.press=S.press.filter(p=>p.id!==id);persist();render();
+}
+function togMil(id){S.mil=S.mil.map(m=>m.id===id?{...m,done:!m.done}:m);persist();render();}
+function addMil(){
+  if(!F.newMilText.trim())return;
+  S.mil.push({id:Date.now(),text:F.newMilText.trim(),val:F.newMilVal,done:false});
+  F.newMilText='';F.newMilVal='';F.showAddMil=false;persist();render();
+}
+function delMil(id){
+  if(!confirm('Remove this milestone?'))return;
+  S.mil=S.mil.filter(m=>m.id!==id);persist();render();
+}
+function evDate(id,v){S.events=S.events.map(ev=>ev.id===id?{...ev,date:v}:ev);persist();}
+function evNote(id,v){S.events=S.events.map(ev=>ev.id===id?{...ev,notes:v}:ev);persist();}
+function addEvent(){
+  if(!F.newEvTitle.trim())return;
+  S.events.push({id:Date.now(),title:F.newEvTitle.trim(),type:F.newEvType,date:F.newEvDate,notes:''});
+  F.newEvTitle='';F.newEvDate='';F.showAddEvent=false;persist();render();
+}
+function delEvent(id){
+  if(!confirm('Remove this event?'))return;
+  S.events=S.events.filter(ev=>ev.id!==id);persist();render();
+}
+function delWin(i){S.wins.splice(i,1);persist();render();}
 function switchTab(t){tab=t;F.opensp=null;F.openpr=null;F.openev=null;render();}
 
 // ─── Init ──────────────────────────────────────────────────────────────────
-// Stripe
 const strEl=document.getElementById('stripe');
 STRIPES.forEach(c=>{const d=document.createElement('div');d.style.cssText=`flex:1;background:${c}`;strEl.appendChild(d);});
-// Nav
 const navEl=document.getElementById('nav');
-[{id:'today',icon:'⚡',lbl:'Today'},{id:'mind',icon:'🧠',lbl:'Mind'},{id:'body',icon:'💪',lbl:'Body'},{id:'money',icon:'💰',lbl:'Money'},{id:'build',icon:'🎯',lbl:'Build'}].forEach(t=>{
+[
+  {id:'today',icon:'⚡',lbl:'Today'},
+  {id:'mind', icon:'🧠',lbl:'Mind'},
+  {id:'body', icon:'💪',lbl:'Body'},
+  {id:'money',icon:'💰',lbl:'Money'},
+  {id:'build',icon:'🎯',lbl:'Build'},
+  {id:'journal',icon:'📓',lbl:'Journal'},
+].forEach(t=>{
   const b=document.createElement('button');
   b.className='nav-btn'+(t.id===tab?' active':'');
   b.dataset.tab=t.id;
