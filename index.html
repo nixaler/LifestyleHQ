@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Tae's HQ">
-<title>Tae's HQ</title>
+<meta name="apple-mobile-web-app-title" content="NexusHQ">
+<title>NexusHQ</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -15,23 +15,23 @@
   --border:rgba(0,0,0,.08);
   --txt:#111111;--txt2:rgba(0,0,0,.55);--txt3:rgba(0,0,0,.28);
   --purple:#7B2FBE;--green:#028A48;--yellow:#c8a800;
-  --blue:#0060A9;--red:#c43030;--orange:#D35B2C;--accent:#4a9eff;
+  --blue:#0060A9;--red:#c43030;--orange:#D35B2C;
+  --accent:#4a9eff;
 }
 html{background:#f5f5f7}
-body{background:#f5f5f7;font-family:'JetBrains Mono','Courier New',monospace;color:#111111;min-height:100vh}
+body{background:#f5f5f7;font-family:'JetBrains Mono','Courier New',monospace;color:#111;min-height:100vh}
 #app{display:flex;flex-direction:column;min-height:100vh;max-width:480px;margin:0 auto;background:#f5f5f7}
 .stripe{height:4px;display:flex;flex-shrink:0}
-.hdr{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:#ffffff}
+.hdr{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:#fff}
 .hdr-title{font-size:16px;font-weight:700}
 .hdr-sub{font-size:8px;color:var(--txt3);letter-spacing:3px;margin-top:2px}
 .hdr-score{font-size:22px;font-weight:700;text-align:right}
 .hdr-score-lbl{font-size:7px;color:var(--txt3);letter-spacing:1px}
 #content{flex:1;padding:14px 16px;overflow-y:auto;padding-bottom:calc(72px + env(safe-area-inset-bottom,16px));background:#f5f5f7}
-.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#ffffff;border-top:1px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom,8px);z-index:100}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom,8px);z-index:100}
 .nav-btn{flex:1;padding:8px 2px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border-top:2px solid transparent;background:transparent;border-left:none;border-right:none;border-bottom:none;color:var(--txt3);font-family:inherit}
 .nav-btn.active{border-top-color:var(--accent);color:var(--accent)}
-.nav-icon{font-size:15px}
-.nav-lbl{font-size:6.5px;letter-spacing:.5px;font-weight:400}
+.nav-icon{font-size:15px}.nav-lbl{font-size:6.5px;letter-spacing:.5px}
 .nav-btn.active .nav-lbl{font-weight:700}
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px}
 .slbl{font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700;display:block}
@@ -57,8 +57,20 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .tx-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
 .row-gap{margin-bottom:8px}
 .del-btn{background:none;border:none;color:var(--red);font-size:18px;cursor:pointer;padding:0 4px;line-height:1;font-family:inherit;flex-shrink:0}
-.edit-lnk{font-size:9px;color:var(--accent);cursor:pointer;letter-spacing:1px;font-weight:700;text-decoration:underline;background:none;border:none;font-family:inherit}
+.edit-lnk{font-size:9px;color:var(--accent);cursor:pointer;letter-spacing:1px;font-weight:700;background:none;border:none;font-family:inherit}
 .add-row{padding:8px 0;text-align:center;color:var(--txt3);font-size:10px;cursor:pointer;letter-spacing:1px;border-top:1px solid var(--border)}
+.tag-btn{border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:10px;cursor:pointer;font-family:inherit;background:rgba(0,0,0,.03);color:var(--txt3)}
+.tag-btn.on{border-color:var(--accent);background:rgba(74,158,255,.1);color:var(--accent);font-weight:700}
+.modal-wrap{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:480px;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));max-height:88vh;overflow-y:auto}
+.modal-handle{width:36px;height:4px;background:rgba(0,0,0,.15);border-radius:2px;margin:0 auto 16px}
+.ob-wrap{position:fixed;inset:0;background:#f5f5f7;z-index:300;overflow-y:auto;padding:40px 24px calc(40px + env(safe-area-inset-bottom,0px))}
+.ob-preset{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.ob-hab{border:1.5px solid var(--border);border-radius:8px;padding:8px 12px;font-size:11px;cursor:pointer;font-family:inherit;background:#fff;color:var(--txt2)}
+.ob-hab.on{border-color:var(--green);background:rgba(2,138,72,.08);color:var(--green);font-weight:700}
+.color-swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:3px solid transparent;flex-shrink:0}
+.color-swatch.on{border-color:#111}
+.calc-hint{font-size:9px;color:var(--green);margin-top:3px;font-weight:700;min-height:13px}
 </style>
 </head>
 <body>
@@ -66,37 +78,44 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
   <div class="stripe" id="stripe"></div>
   <div class="hdr">
     <div>
-      <div class="hdr-title">Tae's HQ</div>
+      <div class="hdr-title" id="hdr-name">NexusHQ</div>
       <div class="hdr-sub" id="hdr-date"></div>
     </div>
-    <div style="text-align:right">
-      <div class="hdr-score" id="score-el">0</div>
-      <div class="hdr-score-lbl">TODAY SCORE</div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="text-align:right">
+        <div class="hdr-score" id="score-el">0</div>
+        <div class="hdr-score-lbl">TODAY SCORE</div>
+      </div>
+      <button onclick="F.showSettings=true;render()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--txt3);padding:4px">⚙️</button>
     </div>
   </div>
   <div id="content"></div>
   <div class="nav" id="nav"></div>
 </div>
 <script>
-// ─── Defaults ──────────────────────────────────────────────────────────────
+// ─── Constants ────────────────────────────────────────────────────────────
 const STRIPES=['#0060A9','#D02B27','#028A48','#FFC72C','#D35B2C','#BF0000','#009CDE','#00B140','#919D9D'];
-const DEF_HABITS=[
-  {id:'wake', name:'Wake by 8AM',        icon:'⏰',key:true},
-  {id:'journ',name:'Journal daily',       icon:'📝',key:true},
-  {id:'water',name:'Drink enough water',  icon:'💧',key:true},
-  {id:'biz',  name:'Work on the business',icon:'🎮',key:true},
-  {id:'mad',  name:'Check in w/ Madison', icon:'👧',key:true},
-  {id:'read', name:'Read daily',          icon:'📖',key:false},
-  {id:'med',  name:'Meditate / breathe',  icon:'🧘',key:false},
-  {id:'fit',  name:'Exercise',            icon:'💪',key:false},
+const ACCENTS=['#4a9eff','#7B2FBE','#028A48','#c43030','#D35B2C','#c8a800','#ff69b4','#00cc88'];
+const VIBE_TAGS=['Productive','Rest Day','Focused','Stressed','Social','Creative','Low Energy','Motivated','Sick','Grateful','Anxious','Clear-headed','Chill','Grinding'];
+const PRESET_HABITS=[
+  {id:'h-wake',name:'Wake up early',    icon:'⏰',key:true},
+  {id:'h-move',name:'Move your body',   icon:'💪',key:true},
+  {id:'h-read',name:'Read daily',       icon:'📖',key:false},
+  {id:'h-h2o', name:'Stay hydrated',    icon:'💧',key:true},
+  {id:'h-jour',name:'Journal daily',    icon:'📝',key:true},
+  {id:'h-med', name:'Meditate',         icon:'🧘',key:false},
+  {id:'h-eat', name:'Eat healthy',      icon:'🥗',key:false},
+  {id:'h-slp', name:'Get enough sleep', icon:'😴',key:false},
+  {id:'h-goal',name:'Work on your goal',icon:'🎯',key:true},
+  {id:'h-grat',name:'Practice gratitude',icon:'🙏',key:false},
+  {id:'h-plan',name:'Daily planning',   icon:'📋',key:false},
+  {id:'h-conn',name:'Connect w/ someone',icon:'🤝',key:false},
 ];
-const MENTAL=['Anxiety','Focus','Stress','Motivation','Confidence','Clarity','Gratitude','Energy'];
-const MCOL={Anxiety:'#c43030',Focus:'#4a9eff',Stress:'#D35B2C',Motivation:'#028A48',Confidence:'#c8a800',Clarity:'#7B2FBE',Gratitude:'#ff69b4',Energy:'#00cc88'};
 const PROMPTS=[
   "What's one thing you're building today that will matter in 6 months?",
-  "If today were your last productive day this week, what would you focus?",
+  "If today were your last productive day this week, what would you focus on?",
   "What's been blocking you and how will you push through it today?",
-  "Who is Taevon becoming today? Describe him.",
+  "Who are you becoming? Describe that person.",
   "What's one small win you can guarantee yourself before the day ends?",
   "What would the most disciplined version of you do in the next 3 hours?",
   "What's one thing you've been putting off that you'll handle today?",
@@ -109,86 +128,42 @@ const PROMPTS=[
   "What would winning today look like — specifically?",
   "You woke up. Nobody knows how hard this season is. What do you do with that?",
 ];
-const OPPS=[
-  {t:'Send DCist outreach email',e:'Free press = thousands of players',a:'tips@dcist.com — use the transit angle from your press kit',c:'business'},
-  {t:'Submit to Product Hunt',e:'Potential thousands of new users today',a:'producthunt.com — submit guessgame.shop',c:'business'},
-  {t:'Brief Emmanuel on sponsor pitch',e:'$75+ first sponsor check',a:'Show him the one-pager — send him to a bar near Metro',c:'quick'},
-  {t:'Complete 2-3 Prolific studies',e:'$3–25 in your pocket today',a:'prolific.com — filter for studies under 15 min',c:'remote'},
-  {t:'Post first Reel to @nixalergames',e:'Audience growth = future revenue',a:'Screen record the game — caption: "Can you guess it?"',c:'platform'},
-  {t:'DM 5 DC Instagram accounts',e:'Organic reach + potential press',a:'Search DC transit/lifestyle accounts — DM each one',c:'platform'},
-  {t:'Reply to Lime with written statement',e:'Keeps your injury claim active',a:'Email Martyna — written only, no phone call',c:'quick'},
-  {t:'Add legal page to guessgame.shop',e:'Legitimizes the business for sponsors',a:'Copy the ToS + Privacy HTML into your site',c:'business'},
-  {t:'Set up Ko-fi on guessgame.shop',e:'Passive income from players who want to support',a:'kofi.com — create free page — embed button',c:'quick'},
-  {t:'Research DC apartments for September',e:'Housing secured = stability',a:'Zillow/Apartments.com — DC/PG County — Sept move-in',c:'quick'},
-  {t:'Post family & friends support message',e:'First player surge + donations',a:'The message is drafted — post to all your socials now',c:'platform'},
-  {t:'Write 3 tweets about TheGuessingGame',e:'Organic reach + brand awareness',a:'Tweet a stat, a behind-the-scenes, and a player challenge',c:'platform'},
-  {t:'Send GGWash outreach email',e:'Transit audience = perfect players',a:'ggwash.org contact form — transit angle pitch',c:'business'},
-  {t:'Research NBA mode data structure',e:'NBA mode = sports audience',a:'Draft team data: conference, division, arena, founded year',c:'business'},
-  {t:'Update your HQ sponsor pipeline',e:'Organization = momentum',a:'Log every contact made, every status change',c:'quick'},
-  {t:'Open a Fidelity brokerage account',e:'Anthropic + SpaceX IPO opportunity',a:'fidelity.com — free account — ready before IPO',c:'remote'},
-  {t:'Outline a NYC subway game pack',e:'City packs = $2.99 paid DLC',a:'Research MTA stations — zone, line, busyness data',c:'business'},
-  {t:'Check Courial app — track toward 10 orders',e:'Unlock your pending Courial payouts',a:'Open Courial — see order count — plan next session',c:'platform'},
-  {t:'Create a NiXalerGames TikTok',e:'TikTok has massive puzzle/game audience',a:'@nixalergames — post the gameplay demo video today',c:'platform'},
-  {t:'Answer 3 Prolific back to back',e:'Stack $10–30 in one sitting from bed',a:'prolific.com — filter short studies — go',c:'remote'},
-];
-const DEF_SPONSORS=[
-  {id:1,name:'Bar near Dupont Circle Metro',type:'Bar / Restaurant',status:'lead',notes:''},
-  {id:2,name:'Bar near U Street / Cardozo',type:'Bar / Restaurant',status:'lead',notes:''},
-  {id:3,name:'Compass Coffee DC',type:'Coffee Shop',status:'lead',notes:''},
-  {id:4,name:'Capital Bikeshare',type:'Transit / Mobility',status:'lead',notes:''},
-  {id:5,name:'Lime DC',type:'Transit / Mobility',status:'lead',notes:''},
-  {id:6,name:'WMATA Partnerships',type:'Transit Authority',status:'lead',notes:''},
-];
-const DEF_PRESS=[
-  {id:1,name:'Greater Greater Washington',contact:'ggwash.org',status:'unsent',notes:''},
-  {id:2,name:'DCist',contact:'tips@dcist.com',status:'unsent',notes:''},
-  {id:3,name:'Axios DC',contact:'dc@axios.com',status:'unsent',notes:''},
-  {id:4,name:'Washington City Paper',contact:'Contact form',status:'unsent',notes:''},
-  {id:5,name:'PoPville',contact:'Contact form',status:'unsent',notes:''},
-];
-const DEF_MIL=[
-  {id:1,text:'Close first paying sponsor',val:'$75',done:false},
-  {id:2,text:'Hit 100 daily players',val:'100 players',done:false},
-  {id:3,text:'Apartment secured',val:'Sept 2026',done:false},
-  {id:4,text:'Vehicle acquired',val:'After apt',done:false},
-  {id:5,text:'Foot fully healed',val:'Recovery',done:false},
-  {id:6,text:'First $1k revenue month',val:'$1k/mo',done:false},
-  {id:7,text:'Hit 1,000 daily players',val:'1k players',done:false},
-  {id:8,text:'Hit $3,000 MRR',val:'$3k MRR',done:false},
-];
-const DEF_EVENTS=[
-  {id:1,title:'Doctor follow-up — foot',date:'',type:'health',notes:'~2 weeks from injury'},
-  {id:2,title:'Secure apartment',date:'2026-09-01',type:'housing',notes:'September hard deadline'},
-  {id:3,title:'Vehicle — plan + save',date:'',type:'housing',notes:'After apartment secured'},
-  {id:4,title:'PWC court — check status',date:'',type:'legal',notes:'Follow up with public defender'},
-  {id:5,title:'Florida FTA warrant',date:'',type:'legal',notes:'Needs resolution'},
-  {id:6,title:'Glasses replacement',date:'',type:'health',notes:''},
-  {id:7,title:'Tooth — needs pulling',date:'',type:'health',notes:''},
-  {id:8,title:'Annual physical / checkup',date:'',type:'health',notes:''},
-];
+const MENTAL=['Anxiety','Focus','Stress','Motivation','Confidence','Clarity','Gratitude','Energy'];
+const MCOL={Anxiety:'#c43030',Focus:'#4a9eff',Stress:'#D35B2C',Motivation:'#028A48',Confidence:'#c8a800',Clarity:'#7B2FBE',Gratitude:'#ff69b4',Energy:'#00cc88'};
 const SPLBL={lead:'Lead',out:'Reached Out',meeting:'In Talks',closed:'Closed ✓',declined:'Declined'};
 const PRLBL={unsent:'Not Sent',sent:'Sent',responded:'Responded',published:'Published ✓',passed:'Passed'};
 const STCOL={lead:'#555',out:'#4a9eff',meeting:'#c8a800',closed:'#028A48',declined:'#c43030',unsent:'#555',sent:'#4a9eff',responded:'#c8a800',published:'#028A48',passed:'#c43030'};
 
-// ─── State ─────────────────────────────────────────────────────────────────
+// ─── State ────────────────────────────────────────────────────────────────
 let S={};
 let tab='today';
 let F={
-  mood:5,ms:{},trigger:'',jans:'',ints:['','',''],
-  win:'',emood:5,refl:'',
+  mood:5,energy:5,ms:{},trigger:'',vibeTags:[],
+  jans:'',ints:['','',''],win:'',emood:5,refl:'',
   sleep:'',water:0,mealinput:'',meals:[],pain:0,showpain:false,
-  incamt:'',incsrc:'DoorDash',expamt:'',expcat:'Food',expnote:'',
+  incamt:'',incsrc:'',expamt:'',expcat:'Food',expnote:'',
   opensp:null,openpr:null,openev:null,
-  journalDate:'',
+  journalDate:'',showFocusMgr:false,showAddFocus:false,
+  newFocTitle:'',newFocNote:'',newFocAction:'',newFocCat:'',
   showAddHabit:false,newHabName:'',newHabIcon:'📌',newHabKey:false,
-  showAddSponsor:false,newSpName:'',newSpType:'Bar / Restaurant',
+  showAddSponsor:false,newSpName:'',newSpType:'',
   showAddPress:false,newPrName:'',newPrContact:'',
   showAddEvent:false,newEvTitle:'',newEvType:'health',newEvDate:'',
   showAddMil:false,newMilText:'',newMilVal:'',
+  showSettings:false,setName:'',setGoal:'',setAccent:'',
+  ob:{step:0,name:'',goal:'1000',habits:['h-wake','h-move','h-jour','h-h2o','h-goal']},
 };
 
+// ─── Storage ──────────────────────────────────────────────────────────────
+const STORE_KEY='nexushq1';
 function load(){
-  try{const d=localStorage.getItem('taehq2');if(d)S=JSON.parse(d);}catch(ex){}
+  let raw=localStorage.getItem(STORE_KEY);
+  if(!raw){
+    const old=localStorage.getItem('taehq2');
+    if(old){raw=old;localStorage.setItem(STORE_KEY,old);}
+  }
+  try{if(raw)S=JSON.parse(raw);}catch(ex){}
+  if(!S.profile)S.profile={setup:false,name:'',goal:1000,accent:'#4a9eff'};
   if(!S.ci)S.ci={};
   if(!S.moodlog)S.moodlog=[];
   if(!S.hlog)S.hlog={};
@@ -197,29 +172,38 @@ function load(){
   if(!S.explog)S.explog=[];
   if(!S.rev)S.rev=[];
   if(!S.wins)S.wins=[];
-  if(!S.sponsors)S.sponsors=JSON.parse(JSON.stringify(DEF_SPONSORS));
-  if(!S.press)S.press=JSON.parse(JSON.stringify(DEF_PRESS));
-  if(!S.mil)S.mil=JSON.parse(JSON.stringify(DEF_MIL));
-  if(!S.events)S.events=JSON.parse(JSON.stringify(DEF_EVENTS));
-  if(!S.habits)S.habits=JSON.parse(JSON.stringify(DEF_HABITS));
-  // give old moodlog entries an id
+  if(!S.sponsors)S.sponsors=[];
+  if(!S.press)S.press=[];
+  if(!S.mil)S.mil=[];
+  if(!S.events)S.events=[];
+  if(!S.habits)S.habits=[];
+  if(!S.focus)S.focus=[];
+  if(!S.focusDone)S.focusDone={};
   S.moodlog=S.moodlog.map(m=>m.id?m:{...m,id:Date.now()+Math.random()});
-  // restore today's body state
+  // restore today body state
   const tl=S.hlog[tod()]||{};
   F.water=tl.water||0;
   F.sleep=tl.sleep!=null?String(tl.sleep):'';
   F.meals=[];
   F.journalDate=tod();
+  // sync accent CSS var
+  applyAccent(S.profile.accent||'#4a9eff');
 }
-function persist(){try{localStorage.setItem('taehq2',JSON.stringify(S));}catch(ex){}}
+function persist(){
+  try{localStorage.setItem(STORE_KEY,JSON.stringify(S));}catch(ex){}
+}
+function applyAccent(col){
+  document.documentElement.style.setProperty('--accent',col);
+}
 
-// ─── Helpers ───────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────
 const tod=()=>new Date().toISOString().slice(0,10);
 const f$=n=>n>=1000?'$'+(n/1000).toFixed(1)+'k':'$'+Math.round(n);
 const ci=()=>S.ci[tod()]||{};
 const hl=()=>S.hablog[tod()]||{};
 const habits=()=>S.habits||[];
 const keys=()=>habits().filter(h=>h.key);
+const goal=()=>S.profile.goal||1000;
 const monthInc=()=>S.inclog.filter(r=>r.date&&r.date.slice(0,7)===tod().slice(0,7)).reduce((s,r)=>s+parseFloat(r.amount||0),0);
 function score(){
   const c=ci(),h=hl(),k=keys();
@@ -235,11 +219,6 @@ function streak(id){
   }
   return s;
 }
-function dOpps(){
-  const n=new Date().getDate();const out=[];
-  for(let i=0;i<5;i++)out.push(OPPS[(n*3+i)%OPPS.length]);
-  return out;
-}
 function e(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''}
 function pct(v,mx){return Math.min(100,mx>0?(v/mx)*100:0).toFixed(0)}
 function fmtDate(d){
@@ -247,21 +226,121 @@ function fmtDate(d){
   try{return new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});}
   catch(ex){return d;}
 }
+function isEmail(s){return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s||'');}
+function isURL(s){return/^https?:\/\//i.test(s||'')||/^www\./i.test(s||'');}
+function normalizeURL(s){return/^https?:\/\//i.test(s)?s:'https://'+s;}
+function calcAmt(s){
+  const clean=String(s||'').replace(/[^0-9+\-*/.() ]/g,'').trim();
+  if(!clean)return 0;
+  try{const v=Function('return '+clean)();return isNaN(v)?parseFloat(s)||0:Math.round(v*100)/100;}
+  catch(ex){return parseFloat(s)||0;}
+}
+function copyToClipboard(txt){
+  navigator.clipboard?.writeText(txt).catch(()=>{});
+  const el=document.getElementById('copy-toast');
+  if(el){el.style.opacity='1';setTimeout(()=>el.style.opacity='0',1500);}
+}
 
-// ─── Render ────────────────────────────────────────────────────────────────
+// ─── Render ───────────────────────────────────────────────────────────────
 function render(){
   const c=document.getElementById('content');if(!c)return;
-  const fns={today:rToday,mind:rMind,body:rBody,money:rMoney,build:rBuild,journal:rJournal};
-  c.innerHTML=(fns[tab]||rToday)();
+  const navEl=document.getElementById('nav');
+  const hn=document.getElementById('hdr-name');
+  if(hn)hn.textContent=(S.profile.name?S.profile.name+"'s HQ":'NexusHQ');
   const sc=score();
   const sel=document.getElementById('score-el');
   if(sel){sel.textContent=sc;sel.style.color=sc>=80?'var(--green)':sc>=50?'var(--yellow)':'var(--red)';}
   const de=document.getElementById('hdr-date');
   if(de)de.textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'}).toUpperCase();
+  if(!S.profile.setup){
+    if(navEl)navEl.style.display='none';
+    c.innerHTML=renderOnboarding();
+    return;
+  }
+  if(navEl)navEl.style.display='flex';
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  const fns={today:rToday,mind:rMind,body:rBody,money:rMoney,build:rBuild,journal:rJournal};
+  c.innerHTML=(fns[tab]||rToday)()+
+    (F.showSettings?renderSettings():'')+
+    '<div id="copy-toast" style="position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:8px 16px;border-radius:8px;font-size:11px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:500">Copied!</div>';
 }
 
-// ─── TODAY ─────────────────────────────────────────────────────────────────
+// ─── Onboarding ───────────────────────────────────────────────────────────
+function renderOnboarding(){
+  const ob=F.ob;
+  if(ob.step===0){
+    return`<div class="ob-wrap">
+<div style="font-size:24px;font-weight:700;margin-bottom:6px">Welcome to NexusHQ</div>
+<div style="font-size:12px;color:var(--txt2);margin-bottom:32px;line-height:1.7">Your personal life operating system. Track habits, mood, money, goals, and your daily wins — all in one place.</div>
+<div style="font-size:10px;color:var(--txt3);letter-spacing:2px;margin-bottom:6px">WHAT SHOULD WE CALL YOU?</div>
+<input class="inp" placeholder="Your first name..." value="${e(ob.name)}" oninput="F.ob.name=this.value" style="margin-bottom:24px">
+<div style="font-size:10px;color:var(--txt3);letter-spacing:2px;margin-bottom:6px">MONTHLY INCOME GOAL</div>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:32px">
+<span style="font-size:16px;font-weight:700;color:var(--txt3)">$</span>
+<input class="inp" type="number" placeholder="e.g. 2000" value="${e(ob.goal)}" oninput="F.ob.goal=this.value" style="flex:1">
+</div>
+<button class="btn btn-full" style="background:var(--accent);color:#fff" onclick="obNext()">CONTINUE →</button>
+</div>`;
+  }
+  if(ob.step===1){
+    const rows=PRESET_HABITS.map(h=>{
+      const on=ob.habits.includes(h.id);
+      return`<button class="ob-hab${on?' on':''}" onclick="obTogHab('${h.id}')">${h.icon} ${h.name}${h.key?' ★':''}</button>`;
+    }).join('');
+    return`<div class="ob-wrap">
+<div style="font-size:20px;font-weight:700;margin-bottom:6px">Pick your habits</div>
+<div style="font-size:11px;color:var(--txt2);margin-bottom:6px;line-height:1.6">Choose habits you want to track daily. ★ = counts toward your score. You can add, edit, or remove these anytime.</div>
+<div class="ob-preset" style="margin-bottom:24px">${rows}</div>
+<button class="btn btn-full" style="background:var(--accent);color:#fff;margin-bottom:10px" onclick="obFinish()">START MY HQ →</button>
+<button class="btn btn-full" style="background:rgba(0,0,0,.05);color:var(--txt2)" onclick="F.ob.step=0;render()">← BACK</button>
+</div>`;
+  }
+  return'';
+}
+function obNext(){if(!F.ob.name.trim())return;F.ob.step=1;render();}
+function obTogHab(id){
+  const i=F.ob.habits.indexOf(id);
+  if(i>=0)F.ob.habits.splice(i,1);else F.ob.habits.push(id);
+  render();
+}
+function obFinish(){
+  S.profile.setup=true;
+  S.profile.name=F.ob.name.trim();
+  S.profile.goal=parseFloat(F.ob.goal)||1000;
+  S.profile.accent='#4a9eff';
+  S.habits=F.ob.habits.map(id=>PRESET_HABITS.find(h=>h.id===id)).filter(Boolean).map(h=>({...h}));
+  persist();render();
+}
+
+// ─── Settings Modal ───────────────────────────────────────────────────────
+function renderSettings(){
+  const p=S.profile;
+  const swatches=ACCENTS.map(c=>`<div class="color-swatch${(F.setAccent||p.accent)===c?' on':''}" style="background:${c}" onclick="F.setAccent='${c}';render()"></div>`).join('');
+  return`<div class="modal-wrap" onclick="if(event.target===this){F.showSettings=false;render()}">
+<div class="modal">
+<div class="modal-handle"></div>
+<div style="font-size:14px;font-weight:700;margin-bottom:16px">Settings</div>
+<div style="font-size:9px;color:var(--txt3);letter-spacing:2px;margin-bottom:5px">YOUR NAME</div>
+<input class="inp" placeholder="First name..." value="${e(F.setName||p.name)}" oninput="F.setName=this.value" style="margin-bottom:12px">
+<div style="font-size:9px;color:var(--txt3);letter-spacing:2px;margin-bottom:5px">MONTHLY INCOME GOAL ($)</div>
+<input class="inp" type="number" placeholder="e.g. 2000" value="${e(F.setGoal!==''?F.setGoal:p.goal)}" oninput="F.setGoal=this.value" style="margin-bottom:12px">
+<div style="font-size:9px;color:var(--txt3);letter-spacing:2px;margin-bottom:8px">ACCENT COLOR</div>
+<div style="display:flex;gap:8px;margin-bottom:20px">${swatches}</div>
+<button class="btn btn-full" style="background:var(--accent);color:#fff;margin-bottom:8px" onclick="saveSettings()">SAVE SETTINGS</button>
+<button class="btn btn-full" style="background:rgba(0,0,0,.05);color:var(--txt2)" onclick="F.showSettings=false;render()">CANCEL</button>
+</div>
+</div>`;
+}
+function saveSettings(){
+  if(F.setName!==''&&F.setName.trim())S.profile.name=F.setName.trim();
+  if(F.setGoal!=='')S.profile.goal=parseFloat(F.setGoal)||1000;
+  if(F.setAccent)S.profile.accent=F.setAccent;
+  applyAccent(S.profile.accent||'#4a9eff');
+  F.showSettings=false;F.setName='';F.setGoal='';F.setAccent='';
+  persist();render();
+}
+
+// ─── TODAY ────────────────────────────────────────────────────────────────
 function rToday(){
   const c=ci(),h=hl(),k=keys(),sc=score();
   const scol=sc>=80?'var(--green)':sc>=50?'var(--yellow)':'var(--red)';
@@ -291,18 +370,6 @@ ${(c.ints||[]).filter(Boolean).map(i=>`<div style="font-size:11px;color:var(--tx
     return`<div class="chk-row" onclick="togHab('${hb.id}')"><div class="chk-box${d?' done':''}">✓</div><span class="chk-lbl${d?' done':''}">${hb.icon} ${hb.name}</span>${s>0?`<span style="font-size:9px;color:var(--yellow);font-weight:700">${s}🔥</span>`:''}</div>`;
   }).join('');
 
-  const opps=dOpps().map(op=>{
-    const cc={business:'#028A48',remote:'#4a9eff',quick:'#c8a800',platform:'#D35B2C'}[op.c]||'#4a9eff';
-    return`<div style="background:var(--card2);border:1px solid ${cc}33;border-radius:8px;padding:12px;margin-bottom:8px">
-<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
-<div style="font-size:12px;font-weight:700;flex:1;padding-right:8px">${e(op.t)}</div>
-<span class="pill" style="background:${cc}22;color:${cc};border:1px solid ${cc}44;flex-shrink:0">${op.c.toUpperCase()}</span>
-</div>
-<div style="font-size:10px;color:var(--yellow);font-weight:700;margin-bottom:3px">${e(op.e)}</div>
-<div style="font-size:10px;color:var(--txt2);line-height:1.6">${e(op.a)}</div>
-</div>`;
-  }).join('');
-
   const eve=c.ed
     ?`<div style="color:var(--green);font-size:11px;margin-bottom:4px">✓ Mood ${c.emood}/10</div>
 ${c.win?`<div style="font-size:11px;color:var(--yellow);font-weight:700;margin-bottom:4px">🏆 ${e(c.win)}</div>`:''}
@@ -313,6 +380,46 @@ ${c.refl?`<div style="font-size:11px;color:var(--txt2);font-style:italic">"${e(c
 <input class="inp" placeholder="Today's win — even a small one..." value="${e(F.win)}" oninput="F.win=this.value" style="margin-bottom:8px">
 <textarea class="inp" rows="2" placeholder="Anything to remember from today..." oninput="F.refl=this.value" style="margin-bottom:8px">${e(F.refl)}</textarea>
 <button class="btn btn-full" style="background:var(--purple);color:#fff" onclick="saveEve()">SAVE EVENING →</button>`;
+
+  const focusDoneToday=S.focusDone[tod()]||{};
+  const focusCards=S.focus.map(item=>{
+    const done=!!focusDoneToday[item.id];
+    const hasEmail=isEmail(item.action);
+    const hasURL=isURL(item.action)&&!hasEmail;
+    const catCol={'work':'#028A48','health':'#4a9eff','finance':'#c8a800','social':'#D35B2C','personal':'#7B2FBE'}[item.cat]||'#555';
+    return`<div style="background:${done?'rgba(0,0,0,.03)':'#fff'};border:1px solid ${done?'var(--border)':'rgba(0,0,0,.1)'};border-radius:10px;padding:12px;margin-bottom:8px;opacity:${done?.6:1}">
+<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:${(item.note||item.action)?'6px':'0'}">
+<div onclick="togFocus('${item.id}')" class="chk-box${done?' done':''}" style="margin-top:1px">✓</div>
+<div style="flex:1">
+<div style="font-size:12px;font-weight:700;${done?'text-decoration:line-through;color:var(--txt3)':''}">${e(item.title)}</div>
+${item.cat?`<span class="pill" style="background:${catCol}22;color:${catCol};border:1px solid ${catCol}44;margin-top:3px">${e(item.cat).toUpperCase()}</span>`:''}
+</div>
+</div>
+${item.note?`<div style="font-size:10px;color:var(--txt2);line-height:1.6;margin-left:30px;margin-bottom:6px">${e(item.note)}</div>`:''}
+${hasEmail?`<div style="margin-left:30px;display:flex;gap:6px;flex-wrap:wrap">
+<a href="mailto:${e(item.action)}?subject=${encodeURIComponent(item.title)}" style="font-size:10px;font-weight:700;color:var(--accent);text-decoration:none;border:1px solid var(--accent);border-radius:6px;padding:4px 10px">✉️ OPEN EMAIL</a>
+<button onclick="copyToClipboard('${e(item.action)}')" style="font-size:10px;font-weight:700;color:var(--txt2);border:1px solid var(--border);border-radius:6px;padding:4px 10px;background:#fff;cursor:pointer;font-family:inherit">COPY ADDRESS</button>
+</div>`:''}
+${hasURL?`<div style="margin-left:30px"><a href="${e(normalizeURL(item.action))}" target="_blank" rel="noopener" style="font-size:10px;font-weight:700;color:var(--accent);text-decoration:none;border:1px solid var(--accent);border-radius:6px;padding:4px 10px">→ OPEN LINK</a></div>`:''}
+</div>`;
+  }).join('');
+
+  const focusMgrRows=F.showFocusMgr?S.focus.map((item,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+<span style="font-size:11px;flex:1;color:var(--txt2)">${e(item.title)}</span>
+<button class="del-btn" onclick="delFocus('${item.id}')">×</button>
+</div>`).join(''):'';
+
+  const focusAddForm=F.showAddFocus?`<div style="padding:12px;background:rgba(0,0,0,.02);border-radius:8px;margin-top:8px">
+<input class="inp row-gap" placeholder="What needs to happen?" value="${e(F.newFocTitle)}" oninput="F.newFocTitle=this.value">
+<input class="inp row-gap" placeholder="Details / context (optional)..." value="${e(F.newFocNote)}" oninput="F.newFocNote=this.value">
+<input class="inp row-gap" placeholder="URL or email (optional, makes it interactive)" value="${e(F.newFocAction)}" oninput="F.newFocAction=this.value">
+<input class="inp" placeholder="Category (work, health, finance…)" value="${e(F.newFocCat)}" oninput="F.newFocCat=this.value" style="margin-bottom:8px">
+<div style="display:flex;gap:6px">
+<button class="btn" style="background:var(--accent);color:#fff;flex:1" onclick="addFocus()">ADD</button>
+<button class="btn" style="background:rgba(0,0,0,.06);color:var(--txt2)" onclick="F.showAddFocus=false;render()">CANCEL</button>
+</div>
+</div>`:
+`<div style="margin-top:8px"><button class="btn btn-full" style="background:rgba(0,0,0,.04);color:var(--txt3);font-size:10px" onclick="F.showAddFocus=true;F.showFocusMgr=true;render()">+ ADD FOCUS ITEM</button></div>`;
 
   return`
 <div class="card">
@@ -328,16 +435,21 @@ ${chips.map(([l,d])=>`<div style="background:${d?'rgba(2,138,72,.2)':'rgba(0,0,0
 <div style="font-size:13px;font-weight:700;line-height:1.5;margin-bottom:12px">"${prompt}"</div>
 ${journ}
 </div>
-<div class="card"><span class="slbl" style="color:var(--green)">🔥 HABITS TODAY</span>${habRows||'<div style="font-size:11px;color:var(--txt3)">No key habits set. Add them in Body tab.</div>'}</div>
+<div class="card"><span class="slbl" style="color:var(--green)">🔥 HABITS TODAY</span>${habRows||'<div style="font-size:11px;color:var(--txt3)">No key habits set — add them in the Body tab.</div>'}</div>
 <div class="card">
-<span class="slbl" style="color:var(--yellow)">⚡ TODAY'S OPPORTUNITIES</span>
-<div style="font-size:9px;color:var(--txt3);margin-bottom:10px">Refreshes daily · Built for your situation</div>
-${opps}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+<span class="slbl" style="color:var(--yellow);margin-bottom:0">⚡ TODAY'S FOCUS</span>
+<button class="edit-lnk" onclick="F.showFocusMgr=!F.showFocusMgr;render()">${F.showFocusMgr?'DONE':'MANAGE'}</button>
+</div>
+${S.focus.length===0&&!F.showFocusMgr?`<div style="font-size:11px;color:var(--txt3);text-align:center;padding:12px 0">No focus items yet. Add your action items below.</div>`:''}
+${focusCards}
+${F.showFocusMgr&&S.focus.length?`<div style="margin-bottom:8px">${focusMgrRows}</div>`:''}
+${focusAddForm}
 </div>
 <div class="card"><span class="slbl" style="color:var(--purple)">🌙 EVENING REFLECTION</span>${eve}</div>`;
 }
 
-// ─── MIND ──────────────────────────────────────────────────────────────────
+// ─── MIND ─────────────────────────────────────────────────────────────────
 function rMind(){
   const sliders=MENTAL.map(s=>{
     const v=F.ms[s]||5;const col=MCOL[s];
@@ -347,31 +459,46 @@ function rMind(){
 </div>`;
   }).join('');
 
+  const tagBtns=VIBE_TAGS.map(t=>`<button class="tag-btn${F.vibeTags.includes(t)?' on':''}" onclick="togVibe('${t}')">${t}</button>`).join('');
+
   const hist=[...S.moodlog].reverse().map((m,ri)=>{
     const realIdx=S.moodlog.length-1-ri;
     const col=m.mood>=7?'var(--green)':m.mood>=5?'var(--yellow)':'var(--red)';
-    const tags=Object.entries(m.ms||{}).filter(([,v])=>v>=7).map(([k,v])=>`<span class="pill" style="background:${MCOL[k]}22;color:${MCOL[k]};border:1px solid ${MCOL[k]}44;margin:2px">${k} ${v}</span>`).join('');
+    const ecol=m.energy>=7?'var(--green)':m.energy>=5?'var(--yellow)':'var(--red)';
+    const tags=[...(m.vibeTags||[])].map(t=>`<span class="pill" style="background:rgba(74,158,255,.1);color:var(--accent);border:1px solid rgba(74,158,255,.3);margin:2px">${t}</span>`).join('');
+    const msTags=Object.entries(m.ms||{}).filter(([,v])=>v>=7).map(([k,v])=>`<span class="pill" style="background:${MCOL[k]}22;color:${MCOL[k]};border:1px solid ${MCOL[k]}44;margin:2px">${k} ${v}</span>`).join('');
     return`<div style="padding:8px 0;border-bottom:1px solid var(--border)">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
 <span style="font-size:10px;color:var(--txt3)">${m.date}</span>
 <div style="display:flex;align-items:center;gap:8px">
 <span style="font-size:12px;font-weight:700;color:${col}">${m.mood}/10</span>
+${m.energy!=null?`<span style="font-size:10px;color:${ecol}">⚡${m.energy}</span>`:''}
 <button class="del-btn" onclick="delMood(${realIdx})">×</button>
 </div>
 </div>
 ${m.trigger?`<div style="font-size:10px;color:var(--txt2);font-style:italic;margin-bottom:3px">${e(m.trigger)}</div>`:''}
-<div>${tags}</div>
+<div>${tags}${msTags}</div>
 </div>`;
   }).join('');
 
   return`
 <div class="card">
 <span class="slbl" style="color:var(--purple)">😊 LOG YOUR MOOD</span>
-<div style="font-size:10px;color:var(--txt3);margin-bottom:5px">Overall mood · <span id="md2" style="color:var(--purple);font-weight:700">${F.mood}/10</span></div>
-<input type="range" min="1" max="10" value="${F.mood}" style="accent-color:var(--purple);margin-bottom:14px" oninput="F.mood=+this.value;document.getElementById('md2').textContent=this.value+'/10'">
+<div style="display:flex;gap:16px;margin-bottom:12px">
+<div style="flex:1">
+<div style="font-size:10px;color:var(--txt3);margin-bottom:3px">Mood · <span id="md2" style="color:var(--purple);font-weight:700">${F.mood}/10</span></div>
+<input type="range" min="1" max="10" value="${F.mood}" style="accent-color:var(--purple)" oninput="F.mood=+this.value;document.getElementById('md2').textContent=this.value+'/10'">
+</div>
+<div style="flex:1">
+<div style="font-size:10px;color:var(--txt3);margin-bottom:3px">Energy · <span id="en2" style="color:var(--yellow);font-weight:700">${F.energy}/10</span></div>
+<input type="range" min="1" max="10" value="${F.energy}" style="accent-color:var(--yellow)" oninput="F.energy=+this.value;document.getElementById('en2').textContent=this.value+'/10'">
+</div>
+</div>
 <div style="font-size:10px;color:var(--txt3);margin-bottom:8px">Mental states</div>
 ${sliders}
-<input class="inp" placeholder="What's driving your mood today?" value="${e(F.trigger)}" oninput="F.trigger=this.value" style="margin-bottom:8px;margin-top:6px">
+<div style="font-size:10px;color:var(--txt3);margin-bottom:6px">Vibe tags</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">${tagBtns}</div>
+<input class="inp" placeholder="What's driving your mood today?" value="${e(F.trigger)}" oninput="F.trigger=this.value" style="margin-bottom:8px">
 <button class="btn btn-full" style="background:var(--purple);color:#fff" onclick="logMood()">LOG MOOD</button>
 </div>
 <div class="card">
@@ -380,10 +507,9 @@ ${S.moodlog.length===0?'<div style="font-size:11px;color:var(--txt3);text-align:
 </div>`;
 }
 
-// ─── BODY ──────────────────────────────────────────────────────────────────
+// ─── BODY ─────────────────────────────────────────────────────────────────
 function rBody(){
   const tl=S.hlog[tod()]||{};
-
   const habRows=habits().map(hb=>{
     const d=!!hl()[hb.id];const s=streak(hb.id);
     return`<div class="chk-row">
@@ -398,17 +524,16 @@ ${s>0?`<span style="font-size:9px;color:var(--yellow);font-weight:700;margin-rig
   const addHabitForm=F.showAddHabit
     ?`<div style="padding:12px;background:rgba(0,0,0,.02);border-radius:8px;margin-top:8px">
 <div style="display:flex;gap:6px;margin-bottom:6px">
-<input class="inp" placeholder="Emoji..." value="${e(F.newHabIcon)}" oninput="F.newHabIcon=this.value" style="width:60px">
+<input class="inp" placeholder="Emoji" value="${e(F.newHabIcon)}" oninput="F.newHabIcon=this.value" style="width:56px">
 <input class="inp" placeholder="Habit name..." value="${e(F.newHabName)}" oninput="F.newHabName=this.value" style="flex:1">
 </div>
 <label style="font-size:10px;color:var(--txt3);display:flex;align-items:center;gap:6px;margin-bottom:8px;cursor:pointer">
-<input type="checkbox" ${F.newHabKey?'checked':''} onchange="F.newHabKey=this.checked"> Mark as KEY habit (counts toward daily score)
+<input type="checkbox" ${F.newHabKey?'checked':''} onchange="F.newHabKey=this.checked"> Mark as KEY (counts toward score)
 </label>
 <div style="display:flex;gap:6px">
 <button class="btn" style="background:var(--green);color:#fff;flex:1" onclick="addHabit()">ADD HABIT</button>
 <button class="btn" style="background:rgba(0,0,0,.06);color:var(--txt2)" onclick="F.showAddHabit=false;render()">CANCEL</button>
-</div>
-</div>`
+</div></div>`
     :`<div class="add-row" onclick="F.showAddHabit=true;render()">+ ADD HABIT</div>`;
 
   const savedMeals=(tl.meals||[]).map((m,i)=>`<div style="display:flex;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)">
@@ -422,27 +547,18 @@ ${s>0?`<span style="font-size:9px;color:var(--yellow);font-weight:700;margin-rig
 <button class="del-btn" onclick="F.meals.splice(${i},1);render()">×</button>
 </div>`).join('');
 
-  const painSection=F.showpain
-    ?`<div style="font-size:10px;color:var(--txt3);margin-bottom:5px">Pain level · <span id="pv" style="color:var(--red);font-weight:700">${F.pain}/10</span></div>
-<input type="range" min="0" max="10" value="${F.pain}" style="accent-color:var(--red);margin-bottom:8px" oninput="F.pain=+this.value;document.getElementById('pv').textContent=this.value+'/10'">
-<div style="display:flex;gap:8px">
-<button class="btn" style="background:var(--red);color:#fff;flex:1" onclick="logPain()">SAVE PAIN LOG</button>
-<button class="btn" style="background:rgba(0,0,0,.06);color:var(--txt2)" onclick="F.showpain=false;render()">CANCEL</button>
-</div>`
-    :`<div style="display:flex;justify-content:space-between;align-items:center">
-${tl.pain!=null?`<div style="font-size:11px;color:var(--red)">Pain logged: ${tl.pain}/10</div>`:'<div style="font-size:11px;color:var(--txt3)">No pain logged today.</div>'}
-<button class="edit-lnk" onclick="F.showpain=true;render()">${tl.pain!=null?'UPDATE':'LOG PAIN'}</button>
-</div>`;
+  const hasPending=F.meals.length>0||F.sleep!==''||F.showpain;
+  const savedNote=(tl.sleep!=null||tl.water!=null||(tl.meals&&tl.meals.length))
+    ?`<div style="font-size:9px;color:var(--txt3);margin-bottom:10px">Last synced: ${[tl.sleep!=null?tl.sleep+'h sleep':'',tl.water!=null?tl.water+' glasses':''].filter(Boolean).join(' · ')}</div>`:'';
 
   return`
 <div class="card">
 <span class="slbl" style="color:var(--green)">💤 SLEEP</span>
-<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
-<input class="inp" type="number" placeholder="Hours..." value="${e(F.sleep)}" oninput="F.sleep=this.value" style="width:90px">
-<span style="font-size:11px;color:var(--txt3);flex:1">/ 6hr goal</span>
-<button class="btn" style="background:var(--green);color:#fff" onclick="logSleep()">SAVE</button>
+<div style="display:flex;gap:8px;align-items:center">
+<input class="inp" type="number" placeholder="Hours slept..." value="${e(F.sleep)}" oninput="F.sleep=this.value" style="width:110px">
+<span style="font-size:11px;color:var(--txt3)">/ 8hr goal</span>
 </div>
-${tl.sleep!=null?`<div class="pbar" style="height:6px"><div class="pbar-fill" style="width:${pct(tl.sleep,6)}%;height:100%;background:var(--green)"></div></div><div style="font-size:9px;color:var(--txt3);margin-top:4px">${tl.sleep}h saved</div>`:''}
+${tl.sleep!=null?`<div style="font-size:9px;color:var(--txt3);margin-top:5px">Last saved: ${tl.sleep}h</div>`:''}
 </div>
 
 <div class="card">
@@ -456,8 +572,7 @@ ${tl.sleep!=null?`<div class="pbar" style="height:6px"><div class="pbar-fill" st
 <button class="btn" style="background:var(--accent);color:#fff;padding:8px 18px;font-size:20px" onclick="adjWater(1)">+</button>
 </div>
 <div class="pbar" style="height:6px"><div class="pbar-fill" style="width:${pct(F.water,8)}%;height:100%;background:var(--accent)"></div></div>
-<button class="btn btn-full" style="background:var(--accent);color:#fff;margin-top:10px" onclick="logWater()">SAVE WATER LOG</button>
-${tl.water!=null?`<div style="font-size:9px;color:var(--txt3);margin-top:5px;text-align:center">Last saved: ${tl.water} glasses</div>`:''}
+${tl.water!=null?`<div style="font-size:9px;color:var(--txt3);margin-top:4px">Last saved: ${tl.water} glasses</div>`:''}
 </div>
 
 <div class="card">
@@ -466,58 +581,72 @@ ${tl.water!=null?`<div style="font-size:9px;color:var(--txt3);margin-top:5px;tex
 <input class="inp" placeholder="Log a meal..." value="${e(F.mealinput)}" oninput="F.mealinput=this.value" onkeydown="if(event.key==='Enter')addMeal()" style="flex:1">
 <button class="btn" style="background:var(--orange);color:#fff" onclick="addMeal()">+</button>
 </div>
-${savedMeals}
-${pendingMeals}
-${F.meals.length>0?`<button class="btn btn-full" style="background:var(--orange);color:#fff;margin-top:10px" onclick="saveMeals()">SAVE ${F.meals.length} MEAL${F.meals.length>1?'S':''} TO LOG</button>`:''}
-${!tl.meals?.length&&!F.meals.length?`<div style="font-size:11px;color:var(--txt3);text-align:center;padding:8px 0">No meals logged today.</div>`:''}
+${savedMeals}${pendingMeals}
+${!tl.meals?.length&&!F.meals.length?`<div style="font-size:11px;color:var(--txt3);text-align:center;padding:4px 0">No meals logged today.</div>`:''}
 </div>
 
 <div class="card">
-<span class="slbl" style="color:var(--red)">🦶 PAIN TRACKER</span>
-${painSection}
+<div style="display:flex;justify-content:space-between;align-items:center">
+<span class="slbl" style="color:var(--red);margin-bottom:0">🦶 PAIN / SYMPTOMS</span>
+<button class="edit-lnk" onclick="F.showpain=!F.showpain;render()">${F.showpain?'HIDE':(tl.pain!=null?'UPDATE':'LOG')}</button>
 </div>
+${F.showpain?`<div style="margin-top:10px">
+<div style="font-size:10px;color:var(--txt3);margin-bottom:4px">Pain level · <span id="pv" style="color:var(--red);font-weight:700">${F.pain}/10</span></div>
+<input type="range" min="0" max="10" value="${F.pain}" style="accent-color:var(--red)" oninput="F.pain=+this.value;document.getElementById('pv').textContent=this.value+'/10'">
+</div>`:tl.pain!=null?`<div style="font-size:11px;color:var(--red);margin-top:4px">Pain today: ${tl.pain}/10</div>`:`<div style="font-size:11px;color:var(--txt3);margin-top:4px">Nothing logged.</div>`}
+</div>
+
+<button class="btn btn-full" style="background:var(--green);color:#fff;margin-bottom:12px;font-size:13px;padding:14px" onclick="syncBody()">💾 SAVE BODY LOG</button>
 
 <div class="card">
 <span class="slbl" style="color:var(--green)">🔄 HABITS</span>
-${habRows||'<div style="font-size:11px;color:var(--txt3);padding:8px 0">No habits yet. Add one below.</div>'}
+${habRows||'<div style="font-size:11px;color:var(--txt3);padding:8px 0">No habits yet.</div>'}
 ${addHabitForm}
 </div>`;
 }
 
-// ─── MONEY ─────────────────────────────────────────────────────────────────
+// ─── MONEY ────────────────────────────────────────────────────────────────
 function rMoney(){
-  const mi=monthInc();
+  const mi=monthInc();const g=goal();
   const txs=[...S.inclog.map(r=>({...r,t:'i'})),...S.explog.map(r=>({...r,t:'e'}))].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const incHint=/[+\-*/]/.test(F.incamt)?`= $${calcAmt(F.incamt).toFixed(2)}`:'';
+  const expHint=/[+\-*/]/.test(F.expamt)?`= $${calcAmt(F.expamt).toFixed(2)}`:'';
+  const incsrc=F.incsrc||'Income';
   return`
 <div class="stat-grid">
 <div class="stat-card"><div style="font-size:24px;font-weight:700;color:var(--green);line-height:1">${f$(mi)}</div><div style="font-size:7px;color:var(--txt3);letter-spacing:2px;margin-top:4px">THIS MONTH</div></div>
-<div class="stat-card"><div style="font-size:24px;font-weight:700;color:var(--yellow);line-height:1">${f$(Math.max(0,1000-mi))}</div><div style="font-size:7px;color:var(--txt3);letter-spacing:2px;margin-top:4px">TO $1K GOAL</div></div>
+<div class="stat-card"><div style="font-size:24px;font-weight:700;color:var(--yellow);line-height:1">${f$(Math.max(0,g-mi))}</div><div style="font-size:7px;color:var(--txt3);letter-spacing:2px;margin-top:4px">TO ${f$(g)} GOAL</div></div>
 </div>
 <div class="card">
-<span class="slbl">$1,000 / MONTH GOAL</span>
-<div class="pbar" style="height:8px"><div class="pbar-fill" style="width:${pct(mi,1000)}%;height:100%;background:var(--green)"></div></div>
-<div style="font-size:9px;color:var(--txt3);margin-top:5px">${((mi/1000)*100).toFixed(1)}% reached</div>
+<span class="slbl">MONTHLY GOAL · ${f$(g)}</span>
+<div class="pbar" style="height:8px"><div class="pbar-fill" style="width:${pct(mi,g)}%;height:100%;background:var(--green)"></div></div>
+<div style="font-size:9px;color:var(--txt3);margin-top:5px">${((mi/g)*100).toFixed(1)}% reached</div>
 </div>
 <div class="card">
 <span class="slbl" style="color:var(--green)">💵 LOG INCOME</span>
-<div style="display:flex;gap:8px">
-<input class="inp" type="number" placeholder="$" value="${F.incamt}" oninput="F.incamt=this.value" style="width:70px">
-<select class="inp" onchange="F.incsrc=this.value" style="flex:1">
-${['DoorDash','Skipcart','GoPuff','Courial','GuessgameShop','Sponsorship','Prolific','Freelance','Other'].map(s=>`<option${s===F.incsrc?' selected':''}>${s}</option>`).join('')}
-</select>
-<button class="btn" style="background:var(--green);color:#fff" onclick="logInc()">LOG</button>
+<div style="display:flex;gap:8px;margin-bottom:3px">
+<div style="width:90px">
+<input class="inp" placeholder="$ or math…" value="${e(F.incamt)}" oninput="F.incamt=this.value;render()" style="width:100%">
+<div class="calc-hint">${incHint}</div>
 </div>
+<input class="inp" placeholder="Source (e.g. DoorDash)..." value="${e(F.incsrc)}" oninput="F.incsrc=this.value" style="flex:1">
+<button class="btn" style="background:var(--green);color:#fff;align-self:flex-start" onclick="logInc()">LOG</button>
+</div>
+<div style="font-size:9px;color:var(--txt3);margin-top:2px">Tip: type math like <b>12.50 + 3</b> and it calculates automatically</div>
 </div>
 <div class="card">
 <span class="slbl" style="color:var(--red)">🧾 LOG EXPENSE</span>
-<div style="display:flex;gap:8px;margin-bottom:8px">
-<input class="inp" type="number" placeholder="$" value="${F.expamt}" oninput="F.expamt=this.value" style="width:70px">
+<div style="display:flex;gap:8px;margin-bottom:3px">
+<div style="width:90px">
+<input class="inp" placeholder="$ or math…" value="${e(F.expamt)}" oninput="F.expamt=this.value;render()" style="width:100%">
+<div class="calc-hint">${expHint}</div>
+</div>
 <select class="inp" onchange="F.expcat=this.value" style="flex:1">
 ${['Food','Gas','Phone','Medical','Transport','Personal','Subscriptions','Other'].map(s=>`<option${s===F.expcat?' selected':''}>${s}</option>`).join('')}
 </select>
 </div>
 <div style="display:flex;gap:8px">
-<input class="inp" placeholder="Note (optional)..." value="${F.expnote}" oninput="F.expnote=this.value" style="flex:1">
+<input class="inp" placeholder="Note (optional)..." value="${e(F.expnote)}" oninput="F.expnote=this.value" style="flex:1">
 <button class="btn" style="background:var(--red);color:#fff" onclick="logExp()">LOG</button>
 </div>
 </div>
@@ -525,17 +654,15 @@ ${['Food','Gas','Phone','Medical','Transport','Personal','Subscriptions','Other'
 <span class="slbl">ALL TRANSACTIONS</span>
 ${txs.length===0?'<div style="font-size:11px;color:var(--txt3);text-align:center;padding:12px 0">No transactions yet.</div>':
 txs.map(tx=>`<div class="tx-row">
-<div style="flex:1">
-<div style="font-size:11px;font-weight:700">${e(tx.source||tx.category)}</div>
-<div style="font-size:9px;color:var(--txt3)">${tx.date}${tx.note?' · '+e(tx.note):''}</div>
-</div>
+<div style="flex:1"><div style="font-size:11px;font-weight:700">${e(tx.source||tx.category)}</div>
+<div style="font-size:9px;color:var(--txt3)">${tx.date}${tx.note?' · '+e(tx.note):''}</div></div>
 <div style="font-size:14px;font-weight:700;color:${tx.t==='i'?'var(--green)':'var(--red)'};">${tx.t==='i'?'+':'-'}$${parseFloat(tx.amount||0).toFixed(0)}</div>
 <button class="del-btn" onclick="${tx.t==='i'?`delInc(${tx.id})`:`delExp(${tx.id})`}">×</button>
 </div>`).join('')}
 </div>`;
 }
 
-// ─── BUILD ─────────────────────────────────────────────────────────────────
+// ─── BUILD ────────────────────────────────────────────────────────────────
 function rBuild(){
   const tr=S.rev.reduce((s,r)=>s+(r.amount||0),0);
   const dm=S.mil.filter(m=>m.done).length;
@@ -554,21 +681,21 @@ ${o?`<div style="margin-top:10px">
 ${Object.entries(SPLBL).map(([k,v])=>`<div onclick="setSpSt(${sp.id},'${k}')" style="background:${sp.status===k?col+'33':'rgba(0,0,0,.03)'};border:1px solid ${sp.status===k?col:'var(--border)'};border-radius:6px;padding:4px 10px;font-size:10px;color:${sp.status===k?col:'var(--txt3)'};cursor:pointer">${v}</div>`).join('')}
 </div>
 <textarea class="inp" rows="2" placeholder="Notes..." oninput="spNote(${sp.id},this.value)" style="margin-bottom:8px">${e(sp.notes)}</textarea>
-<button class="btn" style="background:rgba(196,48,48,.1);color:var(--red);border:1px solid rgba(196,48,48,.2);font-size:10px" onclick="delSponsor(${sp.id})">REMOVE</button>
+<button class="btn" style="background:rgba(196,48,48,.08);color:var(--red);border:1px solid rgba(196,48,48,.2);font-size:10px" onclick="delSponsor(${sp.id})">REMOVE</button>
 </div>`:''}
 </div>`;
   }).join('');
 
   const addSpForm=F.showAddSponsor
     ?`<div class="card" style="padding:12px;margin-bottom:8px">
-<div style="font-size:10px;font-weight:700;color:var(--green);margin-bottom:8px">NEW SPONSOR</div>
-<input class="inp row-gap" placeholder="Name..." value="${e(F.newSpName)}" oninput="F.newSpName=this.value">
-<input class="inp" placeholder="Type..." value="${e(F.newSpType)}" oninput="F.newSpType=this.value" style="margin-bottom:8px">
+<div style="font-size:10px;font-weight:700;color:var(--green);margin-bottom:8px">NEW CONTACT</div>
+<input class="inp row-gap" placeholder="Name / company..." value="${e(F.newSpName)}" oninput="F.newSpName=this.value">
+<input class="inp" placeholder="Type / category..." value="${e(F.newSpType)}" oninput="F.newSpType=this.value" style="margin-bottom:8px">
 <div style="display:flex;gap:6px">
 <button class="btn" style="background:var(--green);color:#fff;flex:1" onclick="addSponsor()">ADD</button>
 <button class="btn" style="background:rgba(0,0,0,.06);color:var(--txt2)" onclick="F.showAddSponsor=false;render()">CANCEL</button>
 </div></div>`
-    :`<div class="add-row" onclick="F.showAddSponsor=true;render()">+ ADD SPONSOR</div>`;
+    :`<div class="add-row" onclick="F.showAddSponsor=true;render()">+ ADD CONTACT</div>`;
 
   const prRows=S.press.map(pr=>{
     const col=STCOL[pr.status]||'#555';const o=F.openpr===pr.id;
@@ -584,21 +711,21 @@ ${o?`<div style="margin-top:10px">
 ${Object.entries(PRLBL).map(([k,v])=>`<div onclick="setPrSt(${pr.id},'${k}')" style="background:${pr.status===k?col+'33':'rgba(0,0,0,.03)'};border:1px solid ${pr.status===k?col:'var(--border)'};border-radius:6px;padding:4px 10px;font-size:10px;color:${pr.status===k?col:'var(--txt3)'};cursor:pointer">${v}</div>`).join('')}
 </div>
 <textarea class="inp" rows="2" placeholder="Notes..." oninput="prNote(${pr.id},this.value)" style="margin-bottom:8px">${e(pr.notes)}</textarea>
-<button class="btn" style="background:rgba(196,48,48,.1);color:var(--red);border:1px solid rgba(196,48,48,.2);font-size:10px" onclick="delPress(${pr.id})">REMOVE</button>
+<button class="btn" style="background:rgba(196,48,48,.08);color:var(--red);border:1px solid rgba(196,48,48,.2);font-size:10px" onclick="delPress(${pr.id})">REMOVE</button>
 </div>`:''}
 </div>`;
   }).join('');
 
   const addPrForm=F.showAddPress
     ?`<div class="card" style="padding:12px;margin-bottom:8px">
-<div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:8px">NEW PRESS CONTACT</div>
-<input class="inp row-gap" placeholder="Publication..." value="${e(F.newPrName)}" oninput="F.newPrName=this.value">
+<div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:8px">NEW MEDIA CONTACT</div>
+<input class="inp row-gap" placeholder="Publication / outlet..." value="${e(F.newPrName)}" oninput="F.newPrName=this.value">
 <input class="inp" placeholder="Contact / email..." value="${e(F.newPrContact)}" oninput="F.newPrContact=this.value" style="margin-bottom:8px">
 <div style="display:flex;gap:6px">
 <button class="btn" style="background:var(--blue);color:#fff;flex:1" onclick="addPress()">ADD</button>
 <button class="btn" style="background:rgba(0,0,0,.06);color:var(--txt2)" onclick="F.showAddPress=false;render()">CANCEL</button>
 </div></div>`
-    :`<div class="add-row" onclick="F.showAddPress=true;render()">+ ADD PRESS CONTACT</div>`;
+    :`<div class="add-row" onclick="F.showAddPress=true;render()">+ ADD MEDIA CONTACT</div>`;
 
   const evRows=S.events.map(ev=>{
     const col={housing:'var(--blue)',legal:'var(--red)',health:'var(--green)'}[ev.type]||'var(--accent)';
@@ -614,7 +741,7 @@ ${Object.entries(PRLBL).map(([k,v])=>`<div onclick="setPrSt(${pr.id},'${k}')" st
 ${o?`<div style="margin-top:8px">
 <input class="inp" type="date" value="${e(ev.date)}" oninput="evDate(${ev.id},this.value)" style="margin-bottom:6px">
 <textarea class="inp" rows="2" placeholder="Notes..." oninput="evNote(${ev.id},this.value)" style="margin-bottom:8px">${e(ev.notes)}</textarea>
-<button class="btn" style="background:rgba(196,48,48,.1);color:var(--red);border:1px solid rgba(196,48,48,.2);font-size:10px" onclick="delEvent(${ev.id})">REMOVE</button>
+<button class="btn" style="background:rgba(196,48,48,.08);color:var(--red);border:1px solid rgba(196,48,48,.2);font-size:10px" onclick="delEvent(${ev.id})">REMOVE</button>
 </div>`:''}
 </div>`;
   }).join('');
@@ -625,7 +752,7 @@ ${o?`<div style="margin-top:8px">
 <input class="inp row-gap" placeholder="Title..." value="${e(F.newEvTitle)}" oninput="F.newEvTitle=this.value">
 <div style="display:flex;gap:8px;margin-bottom:8px">
 <select class="inp" onchange="F.newEvType=this.value" style="flex:1">
-${['health','housing','legal'].map(t=>`<option${t===F.newEvType?' selected':''}>${t}</option>`).join('')}
+${['health','housing','legal','work','personal'].map(t=>`<option${t===F.newEvType?' selected':''}>${t}</option>`).join('')}
 </select>
 <input class="inp" type="date" value="${e(F.newEvDate)}" oninput="F.newEvDate=this.value" style="flex:1">
 </div>
@@ -638,14 +765,14 @@ ${['health','housing','legal'].map(t=>`<option${t===F.newEvType?' selected':''}>
   const milRows=S.mil.map(m=>`<div style="background:${m.done?'rgba(200,168,0,.08)':'var(--card)'};border:1px solid ${m.done?'rgba(200,168,0,.35)':'var(--border)'};border-radius:12px;padding:14px;margin-bottom:8px;display:flex;gap:12px;align-items:center">
 <div onclick="togMil(${m.id})" style="width:22px;height:22px;border-radius:6px;flex-shrink:0;background:${m.done?'var(--yellow)':'transparent'};border:1.5px solid ${m.done?'var(--yellow)':'rgba(0,0,0,.15)'};display:flex;align-items:center;justify-content:center;font-size:12px;color:#000;font-weight:700;cursor:pointer">${m.done?'✓':''}</div>
 <div onclick="togMil(${m.id})" style="flex:1;font-size:11px;color:${m.done?'var(--txt3)':'var(--txt2)'};text-decoration:${m.done?'line-through':'none'};line-height:1.5;cursor:pointer">${e(m.text)}</div>
-<div style="background:${m.done?'rgba(200,168,0,.2)':'rgba(0,0,0,.03)'};border:1px solid ${m.done?'rgba(200,168,0,.35)':'var(--border)'};border-radius:6px;padding:3px 8px;font-size:9px;color:${m.done?'var(--yellow)':'var(--txt3)'};font-weight:700;white-space:nowrap">${e(m.val)}</div>
+<div style="font-size:9px;color:${m.done?'var(--yellow)':'var(--txt3)'};font-weight:700;border:1px solid ${m.done?'rgba(200,168,0,.3)':'var(--border)'};border-radius:6px;padding:3px 8px;white-space:nowrap">${e(m.val)}</div>
 <button class="del-btn" onclick="delMil(${m.id})">×</button>
 </div>`).join('');
 
   const addMilForm=F.showAddMil
     ?`<div class="card" style="padding:12px;margin-bottom:8px">
 <div style="font-size:10px;font-weight:700;color:var(--yellow);margin-bottom:8px">NEW MILESTONE</div>
-<input class="inp row-gap" placeholder="Milestone..." value="${e(F.newMilText)}" oninput="F.newMilText=this.value">
+<input class="inp row-gap" placeholder="The milestone..." value="${e(F.newMilText)}" oninput="F.newMilText=this.value">
 <input class="inp" placeholder="Target / value..." value="${e(F.newMilVal)}" oninput="F.newMilVal=this.value" style="margin-bottom:8px">
 <div style="display:flex;gap:6px">
 <button class="btn" style="background:var(--yellow);color:#000;flex:1" onclick="addMil()">ADD</button>
@@ -659,13 +786,18 @@ ${['health','housing','legal'].map(t=>`<option${t===F.newEvType?' selected':''}>
 <button class="del-btn" onclick="delRev(${r.id})">×</button>
 </div>`).join('');
 
+  const noSp=S.sponsors.length===0&&!F.showAddSponsor;
+  const noPr=S.press.length===0&&!F.showAddPress;
+  const noEv=S.events.length===0&&!F.showAddEvent;
+  const noMil=S.mil.length===0&&!F.showAddMil;
+
   return`
 <div class="stat-grid">
-<div class="stat-card"><div style="font-size:22px;font-weight:700;color:var(--green);line-height:1">${f$(tr)}</div><div style="font-size:7px;color:var(--txt3);letter-spacing:2px;margin-top:3px">GAME REVENUE</div></div>
-<div class="stat-card"><div style="font-size:22px;font-weight:700;color:var(--blue);line-height:1">${S.sponsors.filter(s=>s.status==='closed').length}</div><div style="font-size:7px;color:var(--txt3);letter-spacing:2px;margin-top:3px">SPONSORS CLOSED</div></div>
+<div class="stat-card"><div style="font-size:22px;font-weight:700;color:var(--green);line-height:1">${f$(tr)}</div><div style="font-size:7px;color:var(--txt3);letter-spacing:2px;margin-top:3px">REVENUE LOGGED</div></div>
+<div class="stat-card"><div style="font-size:22px;font-weight:700;color:var(--blue);line-height:1">${S.sponsors.filter(s=>s.status==='closed').length}</div><div style="font-size:7px;color:var(--txt3);letter-spacing:2px;margin-top:3px">PIPELINE CLOSED</div></div>
 </div>
 <div class="card">
-<span class="slbl" style="color:var(--green)">💰 LOG GAME REVENUE</span>
+<span class="slbl" style="color:var(--green)">💰 LOG REVENUE</span>
 <div style="display:flex;gap:8px;margin-bottom:${revRows?'8px':'0'}">
 <input class="inp" type="number" placeholder="$" id="ra" style="width:70px">
 <input class="inp" placeholder="Source..." id="rs" style="flex:1">
@@ -673,18 +805,22 @@ ${['health','housing','legal'].map(t=>`<option${t===F.newEvType?' selected':''}>
 </div>
 ${revRows}
 </div>
-<div style="font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700">🎯 SPONSOR PIPELINE</div>
-${spRows}${addSpForm}
-<div style="font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700;margin-top:8px">📰 PRESS OUTREACH</div>
+<div style="font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700">🎯 OUTREACH PIPELINE</div>
+${noSp?'':''}${spRows}${addSpForm}
+${noSp?`<div style="font-size:11px;color:var(--txt3);text-align:center;padding:8px 0 4px">No contacts in your pipeline yet.</div>`:''}
+<div style="font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700;margin-top:8px">📰 MEDIA CONTACTS</div>
 ${prRows}${addPrForm}
-<div style="font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700;margin-top:8px">📅 EVENTS & LEGAL</div>
+${noPr?`<div style="font-size:11px;color:var(--txt3);text-align:center;padding:8px 0 4px">No media contacts yet.</div>`:''}
+<div style="font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700;margin-top:8px">📅 EVENTS & DEADLINES</div>
 ${evRows}${addEvForm}
-<div style="font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700;margin-top:8px">🏆 LIFE MILESTONES</div>
-<div class="card" style="margin-bottom:10px"><div class="pbar" style="height:6px"><div class="pbar-fill" style="width:${pct(dm,S.mil.length)}%;height:100%;background:var(--yellow)"></div></div><div style="font-size:9px;color:var(--txt3);margin-top:4px">${dm}/${S.mil.length} complete</div></div>
-${milRows}${addMilForm}`;
+${noEv?`<div style="font-size:11px;color:var(--txt3);text-align:center;padding:8px 0 4px">No upcoming events.</div>`:''}
+<div style="font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700;margin-top:8px">🏆 MILESTONES</div>
+${S.mil.length?`<div class="card" style="margin-bottom:10px"><div class="pbar" style="height:6px"><div class="pbar-fill" style="width:${pct(dm,S.mil.length)}%;height:100%;background:var(--yellow)"></div></div><div style="font-size:9px;color:var(--txt3);margin-top:4px">${dm}/${S.mil.length} complete</div></div>`:''}
+${milRows}${addMilForm}
+${noMil?`<div style="font-size:11px;color:var(--txt3);text-align:center;padding:8px 0 4px">No milestones set yet.</div>`:''}`;
 }
 
-// ─── JOURNAL ───────────────────────────────────────────────────────────────
+// ─── JOURNAL ──────────────────────────────────────────────────────────────
 function rJournal(){
   const d=F.journalDate||tod();
   const c=S.ci[d]||{};
@@ -693,72 +829,72 @@ function rJournal(){
   const moods=S.moodlog.filter(m=>m.date===d);
   const habs=habits();
   const habsDone=habs.filter(hb=>h[hb.id]);
-  const habsMissed=habs.filter(hb=>!h[hb.id]);
 
-  // build sorted list of all dates with data
-  const dateset=new Set([
-    tod(),
-    ...Object.keys(S.ci),
-    ...Object.keys(S.hablog),
-    ...Object.keys(S.hlog),
-    ...S.moodlog.map(m=>m.date),
-  ]);
+  const dateset=new Set([tod(),...Object.keys(S.ci),...Object.keys(S.hablog),...Object.keys(S.hlog),...S.moodlog.map(m=>m.date)]);
   const allDates=[...dateset].filter(Boolean).sort().reverse().slice(0,60);
   const dateOpts=allDates.map(dt=>`<option value="${dt}"${dt===d?' selected':''}>${fmtDate(dt)}</option>`).join('');
 
-  const mornSection=c.md?`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
-<div style="font-size:8px;letter-spacing:2px;color:var(--accent);font-weight:700;margin-bottom:6px">☀️ MORNING · MOOD ${c.mood}/10</div>
+  const sc=()=>{
+    const k=habs.filter(x=>x.key);
+    const hd=k.filter(x=>h[x.id]).length;
+    return Math.round(Math.min(100,(c.md?20:0)+(c.jd?15:0)+(hd/Math.max(1,k.length)*35)+(c.ed?20:0)+(c.win?10:0)));
+  };
+  const dayScore=sc();
+  const scol=dayScore>=80?'var(--green)':dayScore>=50?'var(--yellow)':'var(--red)';
+
+  const mornS=c.md?`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+<div style="font-size:8px;letter-spacing:2px;color:var(--accent);font-weight:700;margin-bottom:5px">☀️ MORNING · MOOD ${c.mood}/10</div>
 ${(c.ints||[]).filter(Boolean).map(i=>`<div style="font-size:11px;color:var(--txt2);line-height:1.8">→ ${e(i)}</div>`).join('')}
 </div>`:'';
 
-  const journSection=c.jd?`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
-<div style="font-size:8px;letter-spacing:2px;color:var(--purple);font-weight:700;margin-bottom:6px">📝 JOURNAL</div>
+  const jS=c.jd?`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+<div style="font-size:8px;letter-spacing:2px;color:var(--purple);font-weight:700;margin-bottom:5px">📝 JOURNAL</div>
 <div style="font-size:11px;color:var(--txt2);line-height:1.7;font-style:italic">"${e(c.jans)}"</div>
 </div>`:'';
 
-  const habSection=`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
-<div style="font-size:8px;letter-spacing:2px;color:var(--green);font-weight:700;margin-bottom:6px">🔥 HABITS · ${habsDone.length}/${habs.length} done</div>
+  const habS=`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+<div style="font-size:8px;letter-spacing:2px;color:var(--green);font-weight:700;margin-bottom:5px">🔥 HABITS · ${habsDone.length}/${habs.length}</div>
 ${habsDone.map(hb=>`<div style="font-size:11px;color:var(--green);padding:2px 0">✓ ${hb.icon} ${hb.name}</div>`).join('')}
-${d===tod()&&habsMissed.length?habsMissed.map(hb=>`<div style="font-size:11px;color:var(--txt3);padding:2px 0">○ ${hb.icon} ${hb.name}</div>`).join(''):''}
-${!habsDone.length?'<div style="font-size:11px;color:var(--txt3)">No habits completed</div>':''}
+${!habsDone.length?'<div style="font-size:11px;color:var(--txt3)">None completed</div>':''}
 </div>`;
 
   const bodyParts=[];
   if(tl.sleep!=null)bodyParts.push(`💤 <b>${tl.sleep}h</b> sleep`);
-  if(tl.water!=null)bodyParts.push(`💧 <b>${tl.water}</b> glasses water`);
+  if(tl.water!=null)bodyParts.push(`💧 <b>${tl.water}</b> glasses`);
   if(tl.pain!=null)bodyParts.push(`🦶 Pain <b>${tl.pain}/10</b>`);
-  if(tl.meals&&tl.meals.length)bodyParts.push(`🍽️ ${tl.meals.map(m=>e(m)).join(', ')}`);
-  const bodySection=bodyParts.length?`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
-<div style="font-size:8px;letter-spacing:2px;color:var(--orange);font-weight:700;margin-bottom:6px">💪 BODY</div>
+  if(tl.meals?.length)bodyParts.push(`🍽️ ${tl.meals.map(m=>e(m)).join(', ')}`);
+  const bodyS=bodyParts.length?`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+<div style="font-size:8px;letter-spacing:2px;color:var(--orange);font-weight:700;margin-bottom:5px">💪 BODY</div>
 ${bodyParts.map(p=>`<div style="font-size:11px;color:var(--txt2);padding:2px 0">${p}</div>`).join('')}
 </div>`:'';
 
-  const moodSection=moods.length?`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
-<div style="font-size:8px;letter-spacing:2px;color:var(--purple);font-weight:700;margin-bottom:6px">😊 MOOD</div>
-${moods.map(m=>{const col=m.mood>=7?'var(--green)':m.mood>=5?'var(--yellow)':'var(--red)';
-return`<div style="font-size:12px;font-weight:700;color:${col}">${m.mood}/10${m.trigger?` <span style="font-size:10px;color:var(--txt2);font-weight:400;font-style:italic">— ${e(m.trigger)}</span>`:''}</div>`;}).join('')}
+  const moodS=moods.length?`<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+<div style="font-size:8px;letter-spacing:2px;color:var(--purple);font-weight:700;margin-bottom:5px">😊 MOOD</div>
+${moods.map(m=>{
+  const col=m.mood>=7?'var(--green)':m.mood>=5?'var(--yellow)':'var(--red)';
+  const vibes=(m.vibeTags||[]).map(t=>`<span class="pill" style="background:rgba(74,158,255,.1);color:var(--accent);border:1px solid rgba(74,158,255,.25);margin:2px">${t}</span>`).join('');
+  return`<div style="margin-bottom:4px"><span style="font-size:12px;font-weight:700;color:${col}">${m.mood}/10</span>${m.energy!=null?` <span style="font-size:10px;color:var(--yellow)">⚡${m.energy}</span>`:''}${m.trigger?` <span style="font-size:10px;color:var(--txt2);font-style:italic">— ${e(m.trigger)}</span>`:''}</div>${vibes?`<div>${vibes}</div>`:''}`;
+}).join('')}
 </div>`:'';
 
-  const eveSection=c.ed?`<div style="padding:10px 0">
-<div style="font-size:8px;letter-spacing:2px;color:var(--purple);font-weight:700;margin-bottom:6px">🌙 EVENING · MOOD ${c.emood}/10</div>
+  const eveS=c.ed?`<div style="padding:10px 0">
+<div style="font-size:8px;letter-spacing:2px;color:var(--purple);font-weight:700;margin-bottom:5px">🌙 EVENING · MOOD ${c.emood}/10</div>
 ${c.win?`<div style="font-size:12px;color:var(--yellow);font-weight:700;margin-bottom:4px">🏆 ${e(c.win)}</div>`:''}
 ${c.refl?`<div style="font-size:11px;color:var(--txt2);line-height:1.7;font-style:italic">"${e(c.refl)}"</div>`:''}
 </div>`:'';
 
   const hasData=c.md||c.jd||habsDone.length||bodyParts.length||moods.length||c.ed;
-
-  // income/expense for selected date
   const dayInc=S.inclog.filter(r=>r.date===d);
   const dayExp=S.explog.filter(r=>r.date===d);
-  const moneySection=(dayInc.length||dayExp.length)?`<div class="card" style="margin-top:0">
-<span class="slbl" style="color:var(--green)">💰 MONEY · ${fmtDate(d)}</span>
-${dayInc.map(r=>`<div class="tx-row"><div style="flex:1"><div style="font-size:11px;font-weight:700">${e(r.source)}</div></div><div style="font-size:13px;font-weight:700;color:var(--green)">+$${parseFloat(r.amount).toFixed(0)}</div></div>`).join('')}
+  const moneyS=(dayInc.length||dayExp.length)?`<div class="card">
+<span class="slbl" style="color:var(--green)">💰 MONEY</span>
+${dayInc.map(r=>`<div class="tx-row"><div style="flex:1;font-size:11px;font-weight:700">${e(r.source)}</div><div style="font-size:13px;font-weight:700;color:var(--green)">+$${parseFloat(r.amount).toFixed(0)}</div></div>`).join('')}
 ${dayExp.map(r=>`<div class="tx-row"><div style="flex:1"><div style="font-size:11px;font-weight:700">${e(r.category)}</div>${r.note?`<div style="font-size:9px;color:var(--txt3)">${e(r.note)}</div>`:''}</div><div style="font-size:13px;font-weight:700;color:var(--red)">-$${parseFloat(r.amount).toFixed(0)}</div></div>`).join('')}
-</div>`:'' ;
+</div>`:'';
 
-  const winsSection=(S.wins||[]).length?`<div class="card">
+  const winsS=(S.wins||[]).length?`<div class="card">
 <span class="slbl" style="color:var(--yellow)">🏆 WINS LOG</span>
-${(S.wins||[]).slice(0,15).map((w,i)=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start">
+${(S.wins||[]).slice(0,20).map((w,i)=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start">
 <div><div style="font-size:11px;color:var(--yellow);font-weight:700">${e(w.text)}</div><div style="font-size:9px;color:var(--txt3)">${w.date}</div></div>
 <button class="del-btn" onclick="delWin(${i})">×</button>
 </div>`).join('')}
@@ -768,179 +904,86 @@ ${(S.wins||[]).slice(0,15).map((w,i)=>`<div style="padding:8px 0;border-bottom:1
 <div class="card">
 <span class="slbl">📓 DAILY JOURNAL</span>
 <select class="inp" onchange="F.journalDate=this.value;render()" style="margin-bottom:6px">${dateOpts}</select>
+<div style="display:flex;justify-content:space-between;align-items:center">
 <div style="font-size:9px;color:var(--txt3)">${fmtDate(d)}</div>
+${hasData?`<div style="font-size:12px;font-weight:700;color:${scol}">${dayScore}/100</div>`:''}
 </div>
-${hasData?`<div class="card">${mornSection}${journSection}${habSection}${bodySection}${moodSection}${eveSection}</div>`
+</div>
+${hasData?`<div class="card">${mornS}${jS}${habS}${bodyS}${moodS}${eveS}</div>`
 :`<div class="card"><div style="font-size:11px;color:var(--txt3);text-align:center;padding:20px 0">No data logged for this day.</div></div>`}
-${moneySection}
-${winsSection}`;
+${moneyS}${winsS}`;
 }
 
 // ─── Handlers ─────────────────────────────────────────────────────────────
-function saveMorn(){
-  if(!S.ci[tod()])S.ci[tod()]={};
-  Object.assign(S.ci[tod()],{md:true,mood:F.mood,ints:[...F.ints]});
-  persist();render();
-}
-function editMorn(){
-  const c=S.ci[tod()]||{};
-  F.mood=c.mood||5;F.ints=[...(c.ints||['','',''])];
-  if(S.ci[tod()])S.ci[tod()].md=false;
-  persist();render();
-}
-function saveJourn(){
-  if(!S.ci[tod()])S.ci[tod()]={};
-  Object.assign(S.ci[tod()],{jd:!!F.jans.trim(),jans:F.jans});
-  persist();render();
-}
-function editJourn(){
-  const c=S.ci[tod()]||{};
-  F.jans=c.jans||'';
-  if(S.ci[tod()])S.ci[tod()].jd=false;
-  persist();render();
-}
+function saveMorn(){if(!S.ci[tod()])S.ci[tod()]={};Object.assign(S.ci[tod()],{md:true,mood:F.mood,ints:[...F.ints]});persist();render();}
+function editMorn(){const c=S.ci[tod()]||{};F.mood=c.mood||5;F.ints=[...(c.ints||['','',''])];if(S.ci[tod()])S.ci[tod()].md=false;persist();render();}
+function saveJourn(){if(!S.ci[tod()])S.ci[tod()]={};Object.assign(S.ci[tod()],{jd:!!F.jans.trim(),jans:F.jans});persist();render();}
+function editJourn(){const c=S.ci[tod()]||{};F.jans=c.jans||'';if(S.ci[tod()])S.ci[tod()].jd=false;persist();render();}
 function saveEve(){
   if(!S.ci[tod()])S.ci[tod()]={};
   Object.assign(S.ci[tod()],{ed:true,emood:F.emood,refl:F.refl,win:F.win});
   if(F.win.trim())S.wins=[{text:F.win,date:tod(),id:Date.now()},...(S.wins||[])];
   persist();render();
 }
-function editEve(){
-  const c=S.ci[tod()]||{};
-  F.win=c.win||'';F.refl=c.refl||'';F.emood=c.emood||5;
-  if(S.ci[tod()])S.ci[tod()].ed=false;
-  persist();render();
-}
-function togHab(id){
-  if(!S.hablog[tod()])S.hablog[tod()]={};
-  S.hablog[tod()][id]=!S.hablog[tod()][id];
-  persist();render();
-}
+function editEve(){const c=S.ci[tod()]||{};F.win=c.win||'';F.refl=c.refl||'';F.emood=c.emood||5;if(S.ci[tod()])S.ci[tod()].ed=false;persist();render();}
+function togHab(id){if(!S.hablog[tod()])S.hablog[tod()]={};S.hablog[tod()][id]=!S.hablog[tod()][id];persist();render();}
 function addHabit(){
   if(!F.newHabName.trim())return;
   S.habits.push({id:'h'+Date.now(),name:F.newHabName.trim(),icon:F.newHabIcon||'📌',key:F.newHabKey});
-  F.newHabName='';F.newHabIcon='📌';F.newHabKey=false;F.showAddHabit=false;
-  persist();render();
+  F.newHabName='';F.newHabIcon='📌';F.newHabKey=false;F.showAddHabit=false;persist();render();
 }
-function removeHabit(id){
-  if(!confirm('Remove this habit?'))return;
-  S.habits=S.habits.filter(h=>h.id!==id);
-  persist();render();
-}
-function logMood(){
-  S.moodlog.push({id:Date.now(),date:tod(),mood:F.mood,ms:{...F.ms},trigger:F.trigger});
-  F.trigger='';persist();render();
-}
+function removeHabit(id){if(!confirm('Remove this habit?'))return;S.habits=S.habits.filter(h=>h.id!==id);persist();render();}
+function togVibe(t){const i=F.vibeTags.indexOf(t);if(i>=0)F.vibeTags.splice(i,1);else F.vibeTags.push(t);render();}
+function logMood(){S.moodlog.push({id:Date.now(),date:tod(),mood:F.mood,energy:F.energy,ms:{...F.ms},trigger:F.trigger,vibeTags:[...F.vibeTags]});F.trigger='';F.vibeTags=[];persist();render();}
 function delMood(idx){S.moodlog.splice(idx,1);persist();render();}
-function logSleep(){
-  if(!S.hlog[tod()])S.hlog[tod()]={};
-  S.hlog[tod()].sleep=parseFloat(F.sleep)||0;
-  persist();render();
-}
 function adjWater(d){F.water=Math.max(0,F.water+d);render();}
-function logWater(){
+function addMeal(){if(!F.mealinput.trim())return;F.meals.push(F.mealinput.trim());F.mealinput='';render();}
+function removeSavedMeal(i){if(!S.hlog[tod()]?.meals)return;S.hlog[tod()].meals.splice(i,1);persist();render();}
+function syncBody(){
   if(!S.hlog[tod()])S.hlog[tod()]={};
-  S.hlog[tod()].water=F.water;
+  const d=S.hlog[tod()];
+  if(F.sleep!=='')d.sleep=parseFloat(F.sleep)||0;
+  d.water=F.water;
+  if(F.meals.length){if(!d.meals)d.meals=[];d.meals.push(...F.meals);F.meals=[];}
+  if(F.showpain){d.pain=F.pain;F.showpain=false;}
   persist();render();
 }
-function addMeal(){
-  if(!F.mealinput.trim())return;
-  F.meals.push(F.mealinput.trim());F.mealinput='';render();
-}
-function saveMeals(){
-  if(!F.meals.length)return;
-  if(!S.hlog[tod()])S.hlog[tod()]={};
-  if(!S.hlog[tod()].meals)S.hlog[tod()].meals=[];
-  S.hlog[tod()].meals.push(...F.meals);
-  F.meals=[];persist();render();
-}
-function removeSavedMeal(i){
-  if(!S.hlog[tod()]||!S.hlog[tod()].meals)return;
-  S.hlog[tod()].meals.splice(i,1);
-  persist();render();
-}
-function logPain(){
-  if(!S.hlog[tod()])S.hlog[tod()]={};
-  S.hlog[tod()].pain=F.pain;F.showpain=false;persist();render();
-}
-function logInc(){
-  if(!F.incamt)return;
-  S.inclog.push({id:Date.now(),amount:parseFloat(F.incamt),source:F.incsrc,date:tod()});
-  F.incamt='';persist();render();
-}
-function logExp(){
-  if(!F.expamt)return;
-  S.explog.push({id:Date.now(),amount:parseFloat(F.expamt),category:F.expcat,note:F.expnote,date:tod()});
-  F.expamt='';F.expnote='';persist();render();
-}
+function logInc(){const amt=calcAmt(F.incamt);if(!amt||!F.incsrc.trim())return;S.inclog.push({id:Date.now(),amount:amt,source:F.incsrc,date:tod()});F.incamt='';persist();render();}
+function logExp(){const amt=calcAmt(F.expamt);if(!amt)return;S.explog.push({id:Date.now(),amount:amt,category:F.expcat,note:F.expnote,date:tod()});F.expamt='';F.expnote='';persist();render();}
 function delInc(id){S.inclog=S.inclog.filter(r=>r.id!==id);persist();render();}
 function delExp(id){S.explog=S.explog.filter(r=>r.id!==id);persist();render();}
-function logRev(){
-  const a=parseFloat(document.getElementById('ra')?.value);
-  const s=document.getElementById('rs')?.value;
-  if(!a||!s)return;
-  S.rev.push({id:Date.now(),amount:a,source:s,date:tod()});
-  persist();render();
-}
+function logRev(){const a=parseFloat(document.getElementById('ra')?.value);const s=document.getElementById('rs')?.value;if(!a||!s)return;S.rev.push({id:Date.now(),amount:a,source:s,date:tod()});persist();render();}
 function delRev(id){S.rev=S.rev.filter(r=>r.id!==id);persist();render();}
+function togFocus(id){if(!S.focusDone[tod()])S.focusDone[tod()]={};S.focusDone[tod()][id]=!S.focusDone[tod()][id];persist();render();}
+function addFocus(){
+  if(!F.newFocTitle.trim())return;
+  S.focus.push({id:'f'+Date.now(),title:F.newFocTitle.trim(),note:F.newFocNote.trim(),action:F.newFocAction.trim(),cat:F.newFocCat.trim()});
+  F.newFocTitle='';F.newFocNote='';F.newFocAction='';F.newFocCat='';F.showAddFocus=false;persist();render();
+}
+function delFocus(id){S.focus=S.focus.filter(f=>f.id!==id);persist();render();}
 function setSpSt(id,st){S.sponsors=S.sponsors.map(s=>s.id===id?{...s,status:st}:s);persist();render();}
 function spNote(id,v){S.sponsors=S.sponsors.map(s=>s.id===id?{...s,notes:v}:s);persist();}
-function addSponsor(){
-  if(!F.newSpName.trim())return;
-  S.sponsors.push({id:Date.now(),name:F.newSpName.trim(),type:F.newSpType,status:'lead',notes:''});
-  F.newSpName='';F.showAddSponsor=false;persist();render();
-}
-function delSponsor(id){
-  if(!confirm('Remove this sponsor?'))return;
-  S.sponsors=S.sponsors.filter(s=>s.id!==id);persist();render();
-}
+function addSponsor(){if(!F.newSpName.trim())return;S.sponsors.push({id:Date.now(),name:F.newSpName.trim(),type:F.newSpType,status:'lead',notes:''});F.newSpName='';F.newSpType='';F.showAddSponsor=false;persist();render();}
+function delSponsor(id){if(!confirm('Remove?'))return;S.sponsors=S.sponsors.filter(s=>s.id!==id);persist();render();}
 function setPrSt(id,st){S.press=S.press.map(p=>p.id===id?{...p,status:st}:p);persist();render();}
 function prNote(id,v){S.press=S.press.map(p=>p.id===id?{...p,notes:v}:p);persist();}
-function addPress(){
-  if(!F.newPrName.trim())return;
-  S.press.push({id:Date.now(),name:F.newPrName.trim(),contact:F.newPrContact,status:'unsent',notes:''});
-  F.newPrName='';F.newPrContact='';F.showAddPress=false;persist();render();
-}
-function delPress(id){
-  if(!confirm('Remove this press contact?'))return;
-  S.press=S.press.filter(p=>p.id!==id);persist();render();
-}
+function addPress(){if(!F.newPrName.trim())return;S.press.push({id:Date.now(),name:F.newPrName.trim(),contact:F.newPrContact,status:'unsent',notes:''});F.newPrName='';F.newPrContact='';F.showAddPress=false;persist();render();}
+function delPress(id){if(!confirm('Remove?'))return;S.press=S.press.filter(p=>p.id!==id);persist();render();}
 function togMil(id){S.mil=S.mil.map(m=>m.id===id?{...m,done:!m.done}:m);persist();render();}
-function addMil(){
-  if(!F.newMilText.trim())return;
-  S.mil.push({id:Date.now(),text:F.newMilText.trim(),val:F.newMilVal,done:false});
-  F.newMilText='';F.newMilVal='';F.showAddMil=false;persist();render();
-}
-function delMil(id){
-  if(!confirm('Remove this milestone?'))return;
-  S.mil=S.mil.filter(m=>m.id!==id);persist();render();
-}
+function addMil(){if(!F.newMilText.trim())return;S.mil.push({id:Date.now(),text:F.newMilText.trim(),val:F.newMilVal,done:false});F.newMilText='';F.newMilVal='';F.showAddMil=false;persist();render();}
+function delMil(id){if(!confirm('Remove?'))return;S.mil=S.mil.filter(m=>m.id!==id);persist();render();}
 function evDate(id,v){S.events=S.events.map(ev=>ev.id===id?{...ev,date:v}:ev);persist();}
 function evNote(id,v){S.events=S.events.map(ev=>ev.id===id?{...ev,notes:v}:ev);persist();}
-function addEvent(){
-  if(!F.newEvTitle.trim())return;
-  S.events.push({id:Date.now(),title:F.newEvTitle.trim(),type:F.newEvType,date:F.newEvDate,notes:''});
-  F.newEvTitle='';F.newEvDate='';F.showAddEvent=false;persist();render();
-}
-function delEvent(id){
-  if(!confirm('Remove this event?'))return;
-  S.events=S.events.filter(ev=>ev.id!==id);persist();render();
-}
+function addEvent(){if(!F.newEvTitle.trim())return;S.events.push({id:Date.now(),title:F.newEvTitle.trim(),type:F.newEvType,date:F.newEvDate,notes:''});F.newEvTitle='';F.newEvDate='';F.showAddEvent=false;persist();render();}
+function delEvent(id){if(!confirm('Remove?'))return;S.events=S.events.filter(ev=>ev.id!==id);persist();render();}
 function delWin(i){S.wins.splice(i,1);persist();render();}
 function switchTab(t){tab=t;F.opensp=null;F.openpr=null;F.openev=null;render();}
 
-// ─── Init ──────────────────────────────────────────────────────────────────
+// ─── Init ─────────────────────────────────────────────────────────────────
 const strEl=document.getElementById('stripe');
 STRIPES.forEach(c=>{const d=document.createElement('div');d.style.cssText=`flex:1;background:${c}`;strEl.appendChild(d);});
 const navEl=document.getElementById('nav');
-[
-  {id:'today',icon:'⚡',lbl:'Today'},
-  {id:'mind', icon:'🧠',lbl:'Mind'},
-  {id:'body', icon:'💪',lbl:'Body'},
-  {id:'money',icon:'💰',lbl:'Money'},
-  {id:'build',icon:'🎯',lbl:'Build'},
-  {id:'journal',icon:'📓',lbl:'Journal'},
-].forEach(t=>{
+[{id:'today',icon:'⚡',lbl:'Today'},{id:'mind',icon:'🧠',lbl:'Mind'},{id:'body',icon:'💪',lbl:'Body'},{id:'money',icon:'💰',lbl:'Money'},{id:'build',icon:'🎯',lbl:'Build'},{id:'journal',icon:'📓',lbl:'Journal'}].forEach(t=>{
   const b=document.createElement('button');
   b.className='nav-btn'+(t.id===tab?' active':'');
   b.dataset.tab=t.id;
