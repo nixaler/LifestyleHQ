@@ -767,8 +767,8 @@ function rMoney(){
 <span class="slbl" style="color:var(--green)">💵 LOG INCOME</span>
 <div style="display:flex;gap:8px;margin-bottom:3px">
 <div style="width:90px">
-<input class="inp" placeholder="$ or math…" value="${e(F.incamt)}" oninput="F.incamt=this.value;render()" style="width:100%">
-<div class="calc-hint">${incHint}</div>
+<input class="inp" placeholder="$ or math…" value="${e(F.incamt)}" oninput="F.incamt=this.value;var h=document.getElementById('inc-hint');if(h)h.textContent=/[+\-*/]/.test(this.value)?'= $'+calcAmt(this.value).toFixed(2):''" style="width:100%">
+<div class="calc-hint" id="inc-hint">${incHint}</div>
 </div>
 <input class="inp" placeholder="Source (e.g. DoorDash)..." value="${e(F.incsrc)}" oninput="F.incsrc=this.value" style="flex:1">
 <button class="btn" style="background:var(--green);color:#fff;align-self:flex-start" onclick="logInc()">LOG</button>
@@ -779,8 +779,8 @@ function rMoney(){
 <span class="slbl" style="color:var(--red)">🧾 LOG EXPENSE</span>
 <div style="display:flex;gap:8px;margin-bottom:3px">
 <div style="width:90px">
-<input class="inp" placeholder="$ or math…" value="${e(F.expamt)}" oninput="F.expamt=this.value;render()" style="width:100%">
-<div class="calc-hint">${expHint}</div>
+<input class="inp" placeholder="$ or math…" value="${e(F.expamt)}" oninput="F.expamt=this.value;var h=document.getElementById('exp-hint');if(h)h.textContent=/[+\-*/]/.test(this.value)?'= $'+calcAmt(this.value).toFixed(2):''" style="width:100%">
+<div class="calc-hint" id="exp-hint">${expHint}</div>
 </div>
 <select class="inp" onchange="F.expcat=this.value" style="flex:1">
 ${['Food','Gas','Phone','Medical','Transport','Personal','Subscriptions','Other'].map(s=>`<option${s===F.expcat?' selected':''}>${s}</option>`).join('')}
