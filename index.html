@@ -145,6 +145,31 @@ const PROMPTS=[
 ];
 const MENTAL=['Anxiety','Focus','Stress','Motivation','Confidence','Clarity','Gratitude','Energy'];
 const MCOL={Anxiety:'#c43030',Focus:'#4a9eff',Stress:'#D35B2C',Motivation:'#028A48',Confidence:'#c8a800',Clarity:'#7B2FBE',Gratitude:'#ff69b4',Energy:'#00cc88'};
+const HUSTLE_PROMPTS=[
+  {name:'Urban Concept Sketch',vibe:'Streetwear annotations / Afrodinero style',
+   dalle:'Character concept art reference sheet, aged parchment paper background, urban streetwear aesthetic, black ink linework, detailed cross-hatching, pencil shading, callout arrows with style annotations, graffiti lettering accents, indie comic panel layout, highly detailed',
+   mj:'character concept sketch sheet, aged parchment, urban streetwear, black ink linework, cross-hatching, annotation callout arrows, graffiti text accents, indie comic layout --ar 3:4 --style raw --v 6',
+   col:'var(--orange)'},
+  {name:'B-More Pastel Scribble',vibe:'Vibrant, gritty, textured street portrait',
+   dalle:'Expressive portrait on thick brown cardboard paper, vibrant oil pastel and colored pencil scribbled marks, high-contrast street art style, gritty underground graphic novel energy, visible paper grain texture, raw emotive quality',
+   mj:'expressive portrait, thick oil pastel on brown cardboard, vibrant scribbled lines, high contrast street art, underground graphic novel, visible paper grain --ar 3:4 --style raw --v 6',
+   col:'var(--purple)'},
+  {name:'Gallery Surrealism',vibe:'High-end mid-century editorial portrait',
+   dalle:'Mid-century surrealist oil painting portrait, heavy impasto brushstroke canvas texture, warm cinematic lighting, stylized elongated proportions, high-fashion editorial aesthetic, fine art gallery quality, rich saturated color depth',
+   mj:'mid-century surrealist oil painting portrait, impasto canvas texture, warm cinematic lighting, elongated proportions, editorial fashion, gallery quality, rich colors --ar 3:4 --v 6',
+   col:'var(--accent)'},
+];
+const HUSTLE_CHECKS=[
+  {id:'printer',label:'Canon Selphy charged & loaded'},
+  {id:'battery',label:'Battery pack fully charged'},
+  {id:'paper',label:'Paper pack loaded (108 sheets)'},
+  {id:'hotspot',label:'5G hotspot tested & active'},
+  {id:'table',label:'Folding table + signage packed'},
+  {id:'sleeves',label:'Cellophane sleeves stocked'},
+  {id:'cashapp',label:'CashApp / Venmo ready to scan'},
+  {id:'prompts',label:'Prompts copied to notes app'},
+];
+const HUSTLE_LOCS=['Adams Morgan (18th St)','U Street Corridor','Gallery Place / Chinatown','Custom'];
 const SPLBL={lead:'Lead',out:'Reached Out',meeting:'In Talks',closed:'Closed ✓',declined:'Declined'};
 const PRLBL={unsent:'Not Sent',sent:'Sent',responded:'Responded',published:'Published ✓',passed:'Passed'};
 const STCOL={lead:'#555',out:'#4a9eff',meeting:'#c8a800',closed:'#028A48',declined:'#c43030',unsent:'#555',sent:'#4a9eff',responded:'#c8a800',published:'#028A48',passed:'#c43030'};
@@ -167,6 +192,7 @@ let F={
   showAddMil:false,newMilText:'',newMilVal:'',
   showSettings:false,setName:'',setGoal:'',setAccent:'',setTheme:'',
   ob:{step:0,name:'',goal:'1000',habits:['h-wake','h-move','h-jour','h-h2o','h-goal'],customHabs:[],newHabIcon:'📌',newHabName:'',newHabKey:false},
+  shiftChecklist:{},shiftLocation:'Adams Morgan (18th St)',shiftPrice:15,shiftSheets:108,
 };
 
 // ─── Storage ──────────────────────────────────────────────────────────────
@@ -195,6 +221,8 @@ function load(){
   if(!S.habits)S.habits=[];
   if(!S.focus)S.focus=[];
   if(!S.focusDone)S.focusDone={};
+  if(!S.shifts)S.shifts=[];
+  if(S.activeShift===undefined)S.activeShift=null;
   S.moodlog=S.moodlog.map(m=>m.id?m:{...m,id:Date.now()+Math.random()});
   // restore today body state
   const tl=S.hlog[tod()]||{};
@@ -301,7 +329,7 @@ function render(){
   }
   if(navEl)navEl.style.display='flex';
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
-  const fns={today:rToday,mind:rMind,body:rBody,money:rMoney,build:rBuild,journal:rJournal};
+  const fns={today:rToday,mind:rMind,body:rBody,money:rMoney,build:rBuild,journal:rJournal,hustle:rHustle};
   c.innerHTML=(fns[tab]||rToday)()+
     (F.showSettings?renderSettings():'')+
     '<div id="copy-toast" style="position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:8px 16px;border-radius:8px;font-size:11px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:500">Copied!</div>';
@@ -1027,6 +1055,127 @@ ${hasData?`<div class="card">${mornS}${jS}${habS}${bodyS}${moodS}${eveS}</div>`
 ${moneyS}${winsS}`;
 }
 
+// ─── HUSTLE ───────────────────────────────────────────────────────────────
+function rHustle(){
+  const active=S.activeShift;
+
+  if(active){
+    const elapsed=Math.max(0,Math.floor((Date.now()-active.startMs)/60000));
+    const hrs=Math.floor(elapsed/60);const mins=elapsed%60;
+    const gross=active.orders*(active.price||15);
+    const net=Math.round((active.orders*((active.price||15)-0.38))*100)/100;
+    const sheetsLeft=(active.sheetsStart||108)-active.orders;
+    const pace=active.orders>0?(elapsed/active.orders).toFixed(0):'—';
+    const projNet=elapsed>0?Math.round((net/elapsed)*300):0;
+    return`
+<div style="background:linear-gradient(135deg,#015c30,var(--green));border-radius:14px;padding:20px;margin-bottom:14px;color:#fff;position:relative">
+<div style="font-size:8px;letter-spacing:3px;opacity:.7;margin-bottom:4px">● SHIFT ACTIVE</div>
+<div style="font-size:20px;font-weight:700;margin-bottom:3px">${e(active.location)}</div>
+<div style="font-size:10px;opacity:.75">Started ${new Date(active.startMs).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})} · ${hrs>0?hrs+'h ':''} ${mins}m running</div>
+</div>
+
+<div class="stat-grid" style="margin-bottom:12px">
+<div class="stat-card"><div style="font-size:38px;font-weight:700;color:var(--green);line-height:1;text-align:center">${active.orders}</div><div style="font-size:7px;color:var(--txt3);letter-spacing:2px;margin-top:4px;text-align:center">PRINTS SOLD</div></div>
+<div class="stat-card"><div style="font-size:30px;font-weight:700;color:var(--green);line-height:1;text-align:center">${f$(net)}</div><div style="font-size:7px;color:var(--txt3);letter-spacing:2px;margin-top:4px;text-align:center">NET PROFIT</div></div>
+</div>
+<div class="stat-grid" style="margin-bottom:14px">
+<div class="stat-card"><div style="font-size:24px;font-weight:700;color:var(--yellow);line-height:1;text-align:center">${sheetsLeft}</div><div style="font-size:7px;color:var(--txt3);letter-spacing:2px;margin-top:4px;text-align:center">SHEETS LEFT</div></div>
+<div class="stat-card"><div style="font-size:24px;font-weight:700;color:var(--accent);line-height:1;text-align:center">${pace}</div><div style="font-size:7px;color:var(--txt3);letter-spacing:2px;margin-top:4px;text-align:center">MIN / SALE</div></div>
+</div>
+
+<button class="btn btn-full" style="background:var(--green);color:#fff;font-size:17px;padding:20px;margin-bottom:10px;letter-spacing:1px" onclick="logSale()">+ SOLD ONE &nbsp;·&nbsp; ${f$(active.price||15)}</button>
+${active.orders>0?`<button class="btn btn-full" style="background:var(--dim);color:var(--txt3);font-size:10px;margin-bottom:10px" onclick="undoSale()">↩ UNDO LAST SALE</button>`:''}
+<button class="btn btn-full" style="background:rgba(196,48,48,.1);color:var(--red);border:1px solid rgba(196,48,48,.2);font-size:11px" onclick="endShift()">END SHIFT &amp; SAVE EARNINGS</button>
+${projNet>0?`<div style="font-size:9px;color:var(--txt3);text-align:center;margin-top:8px">At this pace → ${f$(projNet)} projected / 5-hr shift</div>`:''}`;
+  }
+
+  // Pre-shift view
+  const checkDone=HUSTLE_CHECKS.filter(c=>F.shiftChecklist[c.id]).length;
+  const checkRows=HUSTLE_CHECKS.map(c=>{
+    const done=!!F.shiftChecklist[c.id];
+    return`<div class="chk-row" onclick="F.shiftChecklist['${c.id}']=!F.shiftChecklist['${c.id}'];render()">
+<div class="chk-box${done?' done':''}">✓</div>
+<span class="chk-lbl${done?' done':''}">${c.label}</span>
+</div>`;
+  }).join('');
+
+  const locOpts=HUSTLE_LOCS.map(l=>`<option${F.shiftLocation===l?' selected':''}>${l}</option>`).join('');
+
+  const promptCards=HUSTLE_PROMPTS.map((p,i)=>`
+<div class="card" style="padding:14px;margin-bottom:8px">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+<div style="width:10px;height:10px;border-radius:50%;background:${p.col};flex-shrink:0"></div>
+<div style="font-size:12px;font-weight:700">${p.name}</div>
+</div>
+<div style="font-size:9px;color:var(--txt3);margin-bottom:10px;padding-left:18px">${p.vibe}</div>
+<div style="font-size:8px;letter-spacing:1px;color:var(--txt3);margin-bottom:4px">CHATGPT / DALL-E</div>
+<div style="background:var(--dim);border-radius:6px;padding:9px;font-size:10px;color:var(--txt2);line-height:1.65;margin-bottom:6px">${e(p.dalle)}</div>
+<button class="btn btn-full" style="background:var(--dim);color:var(--accent);font-size:9px;letter-spacing:1px;margin-bottom:10px" onclick="copyToClipboard(HUSTLE_PROMPTS[${i}].dalle)">COPY DALL-E PROMPT</button>
+<div style="font-size:8px;letter-spacing:1px;color:var(--txt3);margin-bottom:4px">MIDJOURNEY</div>
+<div style="background:var(--dim);border-radius:6px;padding:9px;font-size:10px;color:var(--txt2);line-height:1.65;margin-bottom:6px">${e(p.mj)}</div>
+<button class="btn btn-full" style="background:var(--dim);color:var(--purple);font-size:9px;letter-spacing:1px" onclick="copyToClipboard(HUSTLE_PROMPTS[${i}].mj)">COPY MIDJOURNEY PROMPT</button>
+</div>`).join('');
+
+  const shifts=[...S.shifts].reverse();
+  const totalNet=S.shifts.reduce((s,sh)=>s+(sh.net||0),0);
+  const shiftHistory=shifts.slice(0,8).map(sh=>{
+    const dur=sh.endMs&&sh.startMs?Math.round((sh.endMs-sh.startMs)/60000):null;
+    const durStr=dur?(Math.floor(dur/60)?Math.floor(dur/60)+'h ':'')+dur%60+'m':'';
+    return`<div style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+<div><div style="font-size:11px;font-weight:700">${e(sh.location)}</div>
+<div style="font-size:9px;color:var(--txt3)">${sh.date}${durStr?' · '+durStr:''}</div></div>
+<div style="text-align:right">
+<div style="font-size:13px;font-weight:700;color:var(--green)">${f$(sh.net||0)}</div>
+<div style="font-size:9px;color:var(--txt3)">${sh.orders} prints</div>
+</div></div>`;
+  }).join('');
+
+  return`
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+<span class="slbl" style="color:var(--green);margin-bottom:0">✅ PRE-SHIFT CHECKLIST</span>
+<span style="font-size:9px;color:${checkDone===HUSTLE_CHECKS.length?'var(--green)':'var(--txt3)'};">${checkDone}/${HUSTLE_CHECKS.length}</span>
+</div>
+<div class="pbar" style="height:5px;margin-bottom:12px"><div class="pbar-fill" style="width:${pct(checkDone,HUSTLE_CHECKS.length)}%;height:100%;background:var(--green)"></div></div>
+${checkRows}
+</div>
+
+<div class="card">
+<span class="slbl" style="color:var(--accent)">⚡ START A SHIFT</span>
+<div style="font-size:9px;color:var(--txt3);letter-spacing:2px;margin-bottom:5px">LOCATION</div>
+<select class="inp" onchange="F.shiftLocation=this.value" style="margin-bottom:10px">${locOpts}</select>
+<div style="display:flex;gap:8px;margin-bottom:12px">
+<div style="flex:1">
+<div style="font-size:9px;color:var(--txt3);letter-spacing:2px;margin-bottom:5px">PRICE / PRINT</div>
+<div style="position:relative">
+<span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--txt3);pointer-events:none;font-weight:700">$</span>
+<input class="inp" type="number" value="${e(F.shiftPrice)}" oninput="F.shiftPrice=+this.value" style="padding-left:22px">
+</div>
+</div>
+<div style="flex:1">
+<div style="font-size:9px;color:var(--txt3);letter-spacing:2px;margin-bottom:5px">SHEETS LOADED</div>
+<input class="inp" type="number" value="${e(F.shiftSheets)}" oninput="F.shiftSheets=+this.value">
+</div>
+</div>
+<div style="background:var(--dim);border-radius:8px;padding:10px;font-size:10px;color:var(--txt3);margin-bottom:12px;line-height:1.7">
+💰 <b style="color:var(--green)">$${(F.shiftPrice-0.38).toFixed(2)}</b> net per print &nbsp;·&nbsp;
+4 sales/hr = <b style="color:var(--green)">${f$((F.shiftPrice-0.38)*20)}</b> per 5h shift
+</div>
+<button class="btn btn-full" style="background:var(--green);color:#fff;font-size:13px;padding:15px" onclick="startShift()">START SHIFT →</button>
+</div>
+
+<div style="font-size:8px;letter-spacing:3px;color:var(--txt3);margin-bottom:10px;font-weight:700">🎨 PROMPT LIBRARY</div>
+${promptCards}
+
+${S.shifts.length?`<div class="card">
+<span class="slbl" style="color:var(--yellow)">📊 SHIFT HISTORY</span>
+${shiftHistory}
+<div style="font-size:9px;color:var(--txt3);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);display:flex;justify-content:space-between">
+<span>${S.shifts.length} shifts</span>
+<span style="color:var(--green);font-weight:700">Total net: ${f$(totalNet)}</span>
+</div></div>`:''}`;
+}
+
 // ─── Handlers ─────────────────────────────────────────────────────────────
 function saveMorn(){if(!S.ci[tod()])S.ci[tod()]={};Object.assign(S.ci[tod()],{md:true,mood:F.mood,ints:[...F.ints]});persist();render();}
 function editMorn(){const c=S.ci[tod()]||{};F.mood=c.mood||5;F.ints=[...(c.ints||['','',''])];if(S.ci[tod()])S.ci[tod()].md=false;persist();render();}
@@ -1090,6 +1239,29 @@ function evNote(id,v){S.events=S.events.map(ev=>ev.id===id?{...ev,notes:v}:ev);p
 function addEvent(){if(!F.newEvTitle.trim())return;S.events.push({id:Date.now(),title:F.newEvTitle.trim(),type:F.newEvType,date:F.newEvDate,notes:''});F.newEvTitle='';F.newEvDate='';F.showAddEvent=false;persist();render();}
 function delEvent(id){if(!confirm('Remove?'))return;S.events=S.events.filter(ev=>ev.id!==id);persist();render();}
 function delWin(i){S.wins.splice(i,1);persist();render();}
+function startShift(){
+  S.activeShift={id:Date.now(),location:F.shiftLocation||'Adams Morgan (18th St)',startMs:Date.now(),date:tod(),orders:0,price:F.shiftPrice||15,sheetsStart:F.shiftSheets||108};
+  F.shiftChecklist={};persist();tab='hustle';render();
+}
+function logSale(){
+  if(!S.activeShift)return;
+  S.activeShift.orders++;persist();render();
+}
+function undoSale(){
+  if(!S.activeShift||S.activeShift.orders<=0)return;
+  S.activeShift.orders--;persist();render();
+}
+function endShift(){
+  if(!S.activeShift)return;
+  const sh=S.activeShift;
+  sh.endMs=Date.now();
+  sh.net=Math.round((sh.orders*((sh.price||15)-0.38))*100)/100;
+  sh.gross=sh.orders*(sh.price||15);
+  if(!S.shifts)S.shifts=[];
+  S.shifts.push({...sh});
+  if(sh.orders>0)S.inclog.push({id:Date.now(),amount:sh.gross,source:'AI Art Hustle — '+sh.location,date:tod()});
+  S.activeShift=null;persist();render();
+}
 function switchTab(t){tab=t;F.opensp=null;F.openpr=null;F.openev=null;render();}
 
 // ─── Init ─────────────────────────────────────────────────────────────────
@@ -1100,7 +1272,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>
 const strEl=document.getElementById('stripe');
 STRIPES.forEach(c=>{const d=document.createElement('div');d.style.cssText=`flex:1;background:${c}`;strEl.appendChild(d);});
 const navEl=document.getElementById('nav');
-[{id:'today',icon:'⚡',lbl:'Today'},{id:'mind',icon:'🧠',lbl:'Mind'},{id:'body',icon:'💪',lbl:'Body'},{id:'money',icon:'💰',lbl:'Money'},{id:'build',icon:'🎯',lbl:'Build'},{id:'journal',icon:'📓',lbl:'Journal'}].forEach(t=>{
+[{id:'today',icon:'⚡',lbl:'Today'},{id:'mind',icon:'🧠',lbl:'Mind'},{id:'body',icon:'💪',lbl:'Body'},{id:'money',icon:'💰',lbl:'Money'},{id:'build',icon:'🎯',lbl:'Build'},{id:'journal',icon:'📓',lbl:'Journal'},{id:'hustle',icon:'🎨',lbl:'Hustle'}].forEach(t=>{
   const b=document.createElement('button');
   b.className='nav-btn'+(t.id===tab?' active':'');
   b.dataset.tab=t.id;
