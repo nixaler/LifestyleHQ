@@ -377,7 +377,7 @@ ${hero}
   if(ob.step===1){
     const rows=PRESET_HABITS.map(h=>{
       const on=ob.habits.includes(h.id);
-      return`<button class="ob-hab${on?' on':''}" onclick="obTogHab('${h.id}')">${h.icon} ${h.name}${h.key?' ★':''}</button>`;
+      return`<button class="ob-hab${on?' on':''}" onclick="obTogHab('${h.id}',this)">${h.icon} ${h.name}${h.key?' ★':''}</button>`;
     }).join('');
     const customRows=(ob.customHabs||[]).map((h,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
 <span style="font-size:14px">${h.icon}</span>
@@ -413,10 +413,10 @@ ${hero}
   return'';
 }
 function obNext(){if(!F.ob.name.trim())return;F.ob.step=1;render();}
-function obTogHab(id){
+function obTogHab(id,el){
   const i=F.ob.habits.indexOf(id);
   if(i>=0)F.ob.habits.splice(i,1);else F.ob.habits.push(id);
-  render();
+  if(el)el.classList.toggle('on',F.ob.habits.includes(id));
 }
 function obAddCustomHab(){
   if(!F.ob.newHabName.trim())return;
