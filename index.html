@@ -79,7 +79,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .ob-hab{border:1.5px solid var(--border);border-radius:8px;padding:8px 12px;font-size:11px;cursor:pointer;font-family:inherit;background:var(--card);color:var(--txt2)}
 .ob-hab.on{border-color:var(--green);background:rgba(2,138,72,.08);color:var(--green);font-weight:700}
 .color-swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:3px solid transparent;flex-shrink:0}
-.color-swatch.on{border-color:#111}
+.color-swatch.on{border-color:var(--txt)}
 .calc-hint{font-size:9px;color:var(--green);margin-top:3px;font-weight:700;min-height:13px}
 @keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
@@ -223,7 +223,7 @@ function load(){
   if(!S.focusDone)S.focusDone={};
   if(!S.shifts)S.shifts=[];
   if(S.activeShift===undefined)S.activeShift=null;
-  S.moodlog=S.moodlog.map(m=>m.id?m:{...m,id:Date.now()+Math.random()});
+  if(S.moodlog.some(m=>!m.id))S.moodlog=S.moodlog.map(m=>m.id?m:{...m,id:Date.now()+Math.random()});
   // restore today body state
   const tl=S.hlog[tod()]||{};
   F.water=tl.water||0;
@@ -1149,7 +1149,7 @@ ${checkRows}
 <div style="font-size:9px;color:var(--txt3);letter-spacing:2px;margin-bottom:5px">PRICE / PRINT</div>
 <div style="position:relative">
 <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--txt3);pointer-events:none;font-weight:700">$</span>
-<input class="inp" type="number" value="${e(F.shiftPrice)}" oninput="F.shiftPrice=+this.value" style="padding-left:22px">
+<input class="inp" type="number" value="${e(F.shiftPrice)}" oninput="F.shiftPrice=+this.value;var m=document.getElementById('hustle-margin');if(m){var n=(+this.value-0.38).toFixed(2);m.innerHTML='💰 <b style=&quot;color:var(--green)&quot;>\$'+n+'</b> net per print &nbsp;·&nbsp; 4 sales/hr = <b style=&quot;color:var(--green)&quot;>\$'+Math.round(n*20)+'</b> per 5h shift'}" style="padding-left:22px">
 </div>
 </div>
 <div style="flex:1">
@@ -1157,7 +1157,7 @@ ${checkRows}
 <input class="inp" type="number" value="${e(F.shiftSheets)}" oninput="F.shiftSheets=+this.value">
 </div>
 </div>
-<div style="background:var(--dim);border-radius:8px;padding:10px;font-size:10px;color:var(--txt3);margin-bottom:12px;line-height:1.7">
+<div id="hustle-margin" style="background:var(--dim);border-radius:8px;padding:10px;font-size:10px;color:var(--txt3);margin-bottom:12px;line-height:1.7">
 💰 <b style="color:var(--green)">$${(F.shiftPrice-0.38).toFixed(2)}</b> net per print &nbsp;·&nbsp;
 4 sales/hr = <b style="color:var(--green)">${f$((F.shiftPrice-0.38)*20)}</b> per 5h shift
 </div>
@@ -1259,6 +1259,7 @@ function endShift(){
   sh.gross=sh.orders*(sh.price||15);
   if(!S.shifts)S.shifts=[];
   S.shifts.push({...sh});
+  if(S.shifts.length>500)S.shifts=S.shifts.slice(-500);
   if(sh.orders>0)S.inclog.push({id:Date.now(),amount:sh.gross,source:'AI Art Hustle — '+sh.location,date:tod()});
   S.activeShift=null;persist();render();
 }
